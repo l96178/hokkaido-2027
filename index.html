@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>北海道滑雪行程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday travel, calm and exact, read on a phone during the trip
+   IDEA a JR Hokkaido route board: one map of the loop, today's line lit in signal red
+   PICTURE a drawn map of 道央 (coast, Toya and Shikotsu lakes, Yotei) with each day's route
+   COLOUR snow white ground, lake blue band, signal red for routes and the selected day
+   TYPE Noto Sans TC 900 titles + Noto Sans TC text, Barlow Semi Condensed for dates
+   LAYOUT blue band with title + overview map; day tabs; schedule left, day map + info right; dialogs for car, free day, spots */
+:root{color-scheme:light;--bg:#ffffff;--ink:#0f2a3f;--mute:#567087;--sky:#1673c4;--ice:#eef7fd;--red:#d1362b;--line:#d3e6f4;--chip:#e2f1fc;--land:#fdfeff;--sea:#a8d5f4;--lab:#1c3346;--ok:#1f7a4d}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:light}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans TC",system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.band{padding:clamp(24px,3.5vw,48px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.top{position:relative;overflow:hidden;color:var(--ink);padding-bottom:clamp(96px,11vw,140px);background:radial-gradient(circle,rgba(255,255,255,.65) 1.5px,transparent 2.2px) 0 0/90px 90px,radial-gradient(circle,rgba(255,255,255,.6) 2.4px,transparent 3.2px) 35px 45px/160px 160px,linear-gradient(180deg,#58afea 0%,#97cff5 55%,#dcf0fc 100%)}
+@media(prefers-reduced-motion:no-preference){.top{animation:snow 14s linear infinite}}
+@keyframes snow{to{background-position:20px 90px,75px 205px,0 0}}
+.hero{position:relative;z-index:1}
+.peaks{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:clamp(80px,10vw,130px);display:block}
+.hero{display:grid;gap:24px;align-items:center}
+@media(min-width:880px){.hero{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}}
+.top h1{font-weight:900;font-size:clamp(30px,4.6vw,48px);line-height:1.08;margin:0 0 10px;text-wrap:balance}
+.top p{margin:0 0 14px;color:#173a55}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.facts li{background:rgba(255,255,255,.6);border-radius:10px;padding:6px 12px;font-size:15px}
+.facts b{font-weight:700}
+.big{background:var(--land);border-radius:18px;padding:6px;box-shadow:0 14px 34px rgba(20,90,150,.28)}
+.big svg,.mini svg{display:block;width:100%;height:auto}
+.tabs{display:flex;gap:8px;padding:14px max(5vw,16px) 8px;max-width:calc(1240px + 10vw);margin:0 auto;overflow-x:auto;scrollbar-width:thin}
+.tab{flex:none;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:6px 14px;min-height:44px;cursor:pointer;text-align:left;line-height:1.25}
+.tab b{display:block;font:700 22px "Barlow Semi Condensed",sans-serif;white-space:nowrap}
+.tab span{font-size:13px;color:var(--mute);white-space:nowrap}
+.tab[aria-selected=true]{background:var(--sky);border-color:var(--sky);color:#fff}
+.tab[aria-selected=true] span{color:#dcefff}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.day{display:grid;gap:28px}
+@media(min-width:900px){.day{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
+.day h2{font-weight:900;font-size:clamp(26px,3.4vw,36px);line-height:1.1;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 16px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:0 0 10px}
+.seg button{border:0;background:var(--bg);padding:8px 16px;min-height:44px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--sky);color:var(--bg);font-weight:700}
+.decide{background:var(--ice);border-radius:12px;padding:10px 14px;margin:0 0 14px;font-size:15px}
+.list{list-style:none;margin:0;padding:0}
+.it{display:grid;grid-template-columns:5.4em minmax(0,1fr);gap:4px 16px;padding:14px 0;border-top:1px solid var(--line)}
+.it .when b{display:block;font-size:20px;font-weight:900;color:var(--sky);line-height:1.2}
+.it .when small{font:600 15px "Barlow Semi Condensed",sans-serif;color:var(--mute);white-space:nowrap}
+.it p{margin:0 0 2px}
+.it p{font-size:17px}
+.it.none{color:var(--mute)}
+.lk{display:inline;background:#e2f1fc;color:var(--ink);border:1px solid #a8d3f2;border-radius:8px;padding:1px 8px;cursor:pointer;font-weight:inherit;line-height:1.9;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.lk{margin:0 .35em}
+.lk.first{margin-left:0}
+.lk.last{margin-right:0}
+.lk::after{content:'›';color:var(--sky);font-weight:900;margin-left:5px}
+.lk:hover{background:#cfe8fa}
+.lk.cta{background:var(--sky);border-color:var(--sky);color:#fff;font-weight:700;padding:6px 12px;line-height:1.5}
+.lk.cta::after{color:#fff}
+.lk.cta:hover{background:#0f5fa6}
+a[target=_blank]::after{content:'↗';font-size:.85em;margin-left:3px;color:var(--sky)}
+.hint{font-size:14px;color:var(--mute);margin:-8px 0 12px}
+.pill{display:inline-block;background:var(--sky);color:#fff;border:0;border-radius:999px;padding:6px 14px;min-height:36px;font-weight:700;cursor:pointer;margin-top:4px}
+.card{background:var(--ice);border-radius:16px;padding:18px}
+.card+.card{margin-top:16px}
+.card h3{margin:0 0 8px;font-size:17px}
+.mini{background:var(--land);border-radius:12px;overflow:hidden;margin:0 0 10px}
+.legend{font-size:14px;color:var(--mute);margin:0 0 8px}
+.gm{display:inline-block;font-weight:700;text-decoration:none;border-bottom:2px solid var(--sky)}
+dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px}
+dt{color:var(--mute);white-space:nowrap}
+dd{margin:0;font-weight:500}
+.card ul{margin:0;padding-left:1.2em}
+.card li{margin:4px 0}
+@media(min-width:900px){aside{position:sticky;top:12px;align-self:start}}
+.todo{background:var(--ice)}
+.todo h2{font-weight:900;font-size:clamp(24px,3vw,32px);margin:0 0 12px}
+.chks{display:grid;gap:8px 20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,24em),1fr));list-style:none;margin:0;padding:0}
+.chks li{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg);border-radius:12px;border:1px solid var(--line)}
+.st{flex:none;font-size:13px;font-weight:700;border-radius:8px;padding:2px 8px;background:var(--chip);white-space:nowrap}
+.st.ok{background:var(--ok);color:var(--bg)}
+foot,.foot{display:block;color:var(--mute);font-size:14px}
+dialog{border:0;border-radius:18px;padding:0;width:min(720px,94vw);max-height:88vh;background:var(--bg);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(8,20,32,.55)}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg)}
+.dh h3{margin:0;font-size:20px;font-weight:900}
+.x{border:1px solid var(--line);background:var(--bg);border-radius:10px;min-width:44px;min-height:44px;cursor:pointer;font-size:20px}
+.db{padding:16px 20px 22px}
+.db p{margin:0 0 10px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;vertical-align:top}
+thead th{background:var(--ice)}
+tbody th{white-space:nowrap;color:var(--mute);font-weight:500}
+td{white-space:pre-line}
+.hl td{font-weight:700}
+.grp{margin:22px 0 6px;font-size:18px;font-weight:900;color:var(--sky)}
+.recs{list-style:none;padding:0;margin:0}
+.recs li{padding:14px 0;border-top:1px solid var(--line)}
+.recs p{margin:8px 0 6px}
+.recs dl{font-size:15px;gap:4px 12px}
+.recs .stn{color:var(--mute);font-size:14px}
+.note{font-size:14px;color:var(--mute)}
+svg text{font:500 18px "Noto Sans TC",sans-serif;fill:var(--lab);paint-order:stroke;stroke:var(--land);stroke-width:4px;stroke-linejoin:round}
+svg .sea{fill:var(--sea)}
+svg .land{fill:var(--land)}
+svg .rt{fill:none;stroke:var(--red);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+svg .rt.alt{stroke-width:3;stroke-dasharray:2 8;opacity:.8}
+svg .rt.faint{stroke:var(--mute);stroke-width:2.5;opacity:.45}
+svg .stop{fill:var(--land);stroke:var(--red);stroke-width:3}
+svg .stop.dim{stroke:var(--mute)}
+svg .mt{fill:var(--mute);opacity:.6}
+svg .lk2 text{font-weight:700}
+svg.metro text{font-size:17px}
+svg .arw{fill:var(--red);stroke:var(--land);stroke-width:1.5}
+svg .arw.alt{fill:var(--mute)}
+svg .num{fill:var(--red);stroke:none;font:700 15px "Barlow Semi Condensed",sans-serif}
+svg .ln{fill:none;stroke-width:7;stroke-linecap:round}
+@media(prefers-reduced-motion:no-preference){.rt{stroke-dashoffset:0;transition:opacity .3s}}
+@media(max-width:600px){.it{grid-template-columns:4.2em minmax(0,1fr);gap:4px 12px}.it .when b{font-size:18px}table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px}.stack td,.stack th{display:flow-root;border:0;padding:3px 0;padding-inline-start:7em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:6.5em;margin-inline-start:-7em;color:var(--mute);font-weight:500}.stack tbody th{padding-inline-start:0;color:var(--ink);font-weight:900}}
+</style>
+</head>
+<body>
+<header class="top band">
+  <div class="wrap hero">
+    <div>
+      <h1>2027 北海道滑雪行程</h1>
+      <p>2/27 大家各自搭機到新千歲機場集合，3/7 從新千歲各自回程。機場取車，札幌出發繞一圈，洞爺住五晚、在留壽都和二世谷滑雪，再經小樽回札幌。</p>
+      <ul class="facts">
+        <li><b>9</b> 天 2/27–3/7</li>
+        <li><b>8</b> 人・<b>2</b> 台車</li>
+        <li>洞爺 5 晚・札幌 3 晚</li>
+      </ul>
+    </div>
+    <div class="big"><svg id="overview" viewBox="0 0 600 590" role="img" aria-label="整趟行程路線圖"></svg></div>
+  </div>
+  <svg class="peaks" viewBox="0 0 1200 130" preserveAspectRatio="none" aria-hidden="true"><path fill="#e4f2fc" d="M0 130V72L120 30L230 78L350 18L480 82L610 34L730 86L870 22L1010 80L1110 44L1200 70V130Z"/><path fill="#cfe6f6" d="M350 18L480 82L400 82ZM870 22L1010 80L925 80ZM120 30L230 78L160 78Z"/><path fill="#ffffff" d="M0 130V98L170 58L310 104L460 62L630 108L790 60L950 104L1090 68L1200 98V130Z"/><path fill="#e6f2fb" d="M170 58L310 104L215 104ZM460 62L630 108L520 108ZM790 60L950 104L850 104ZM1090 68L1200 98L1135 98Z"/></svg>
+</header>
+
+<nav class="tabs" id="tabs" role="tablist" aria-label="日期"></nav>
+
+<main class="band" style="padding-top:12px">
+  <div class="wrap day" id="day"></div>
+</main>
+
+<section class="todo band">
+  <div class="wrap">
+    <h2>出發前要訂</h2>
+    <ul class="chks" id="todo"></ul>
+  </div>
+</section>
+
+<footer class="band"><div class="wrap foot">內容依「2027北海道滑雪」Google 試算表整理（2026/11/24）。營業時間、費用以各官網為準。地圖是示意圖，開車請用 Google 地圖導航。</div></footer>
+
+<dialog id="dlg" aria-labelledby="dlgT">
+  <div class="dh"><h3 id="dlgT"></h3><button class="x" id="dlgX" aria-label="關閉">×</button></div>
+  <div class="db" id="dlgB"></div>
+</dialog>
+<dialog id="dlg2" aria-labelledby="dlg2T">
+  <div class="dh"><h3 id="dlg2T"></h3><button class="x" id="dlg2X" aria-label="關閉">×</button></div>
+  <div class="db" id="dlg2B"></div>
+</dialog>
+
+<script>
+{
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const gq=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+
+/* ---------- places on the drawn map ---------- */
+const PL={
+ cts:{n:'新千歲機場',lon:141.69,lat:42.79,l:[18,40,'end'],q:'新千歳空港'},
+ spk:{n:'札幌',lon:141.35,lat:43.07,l:[12,-6,'start'],q:'SAPPORO HOTEL by GRANBELL 〒060-0906'},
+ dbt:{n:'頭大佛',lon:141.39,lat:42.94,l:[12,6,'start'],q:'頭大仏殿'},
+ jzk:{n:'定山溪',lon:141.16,lat:42.97,l:[-12,4,'end'],q:'定山渓温泉'},
+ nkym:{n:'中山峠',lon:141.07,lat:42.87,l:[12,6,'start'],q:'道の駅 望羊中山'},
+ silo:{n:'筒倉展望台',lon:140.80,lat:42.63,l:[-12,-6,'end'],q:'サイロ展望台'},
+ villa:{n:'洞爺民宿',lon:140.76,lat:42.552,l:[-12,18,'end'],q:'TOYA Station Villa'},
+ sktu:{n:'支笏湖',lon:141.41,lat:42.775,l:[12,-8,'start'],q:'支笏湖 山線鉄橋'},
+ nbr:{n:'登別地獄谷',lon:141.15,lat:42.50,l:[12,6,'start'],q:'登別地獄谷'},
+ rsts:{n:'留壽都',lon:140.90,lat:42.75,l:[12,6,'start'],q:'ルスツリゾート'},
+ nsk:{n:'二世谷',lon:140.70,lat:42.86,l:[0,-14,'middle'],q:'ニセコグラン・ヒラフ'},
+ kyg:{n:'京極',lon:140.88,lat:42.86,l:[8,26,'middle'],q:'京極ふきだし公園'},
+ yti:{n:'余市',lon:140.79,lat:43.19,l:[0,26,'middle'],q:'余市駅'},
+ otr:{n:'小樽',lon:141.00,lat:43.19,l:[0,26,'middle'],q:'小樽運河'},
+ kh:{n:'',lon:141.57,lat:42.98,hide:1},
+ tw:{n:'',lon:140.765,lat:42.62,hide:1},
+ kz:{n:'',lon:140.665,lat:42.985,hide:1,q:'小沢駅 共和町'}
+};
+const W=600,H=590,L0=140.52,L1=141.82,A0=42.36,A1=43.30;
+const P=(lon,lat)=>[(lon-L0)/(L1-L0)*W,(A1-lat)/(A1-A0)*H];
+const pts=a=>a.map(([lo,la])=>P(lo,la).map(v=>v.toFixed(1)).join(',')).join(' ');
+const north=[[140.52,43.30],[140.52,43.28],[140.64,43.27],[140.72,43.21],[140.79,43.198],[140.9,43.212],[141.0,43.198],[141.1,43.17],[141.2,43.15],[141.3,43.18],[141.42,43.24],[141.52,43.30]];
+const bay=[[140.52,42.36],[140.52,42.575],[140.62,42.572],[140.70,42.575],[140.76,42.543],[140.82,42.50],[140.87,42.465],[140.93,42.42],[140.97,42.375],[140.975,42.36]];
+const south=[[141.03,42.36],[141.05,42.38],[141.10,42.415],[141.20,42.47],[141.35,42.545],[141.50,42.60],[141.60,42.63],[141.82,42.62],[141.82,42.36]];
+const ell=(lon,lat,rl,ra)=>{const [x,y]=P(lon,lat);return `<ellipse class="sea" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(rl/(L1-L0)*W).toFixed(1)}" ry="${(ra/(A1-A0)*H).toFixed(1)}"/>`};
+const base=()=>{const [yx,yy]=P(140.81,42.83);return `<rect class="land" width="${W}" height="${H}"/><polygon class="sea" points="${pts(north)}"/><polygon class="sea" points="${pts(bay)}"/><polygon class="sea" points="${pts(south)}"/>${ell(140.85,42.60,0.075,0.045)}${ell(141.33,42.77,0.08,0.035)}<polygon class="mt" points="${yx},${yy-16} ${yx-16},${yy+10} ${yx+16},${yy+10}"/><text x="${yx-22}" y="${yy+8}" text-anchor="end" style="font-size:16px">羊蹄山</text><text x="${P(140.66,42.44)[0]}" y="${P(140.66,42.44)[1]}" style="font-size:16px;fill:var(--mute)">內浦灣</text><text x="${P(141.12,43.27)[0]}" y="${P(141.12,43.27)[1]}" style="font-size:16px;fill:var(--mute)">石狩灣</text><text x="${P(140.86,42.585)[0]}" y="${P(140.86,42.585)[1]}" style="font-size:15px;fill:var(--mute)" text-anchor="middle">洞爺湖</text>`};
+const arrows=(keys,cls)=>{let o='';for(let i=1;i<keys.length;i++){const [x1,y1]=P(PL[keys[i-1]].lon,PL[keys[i-1]].lat),[x2,y2]=P(PL[keys[i]].lon,PL[keys[i]].lat);if(Math.hypot(x2-x1,y2-y1)<30)continue;const a=Math.atan2(y2-y1,x2-x1)*180/Math.PI,mx=(x1+x2)/2,my=(y1+y2)/2;o+=`<path class="arw ${cls||''}" d="M9 0L-7 -7.5L-3 0L-7 7.5Z" transform="translate(${mx.toFixed(1)},${my.toFixed(1)}) rotate(${a.toFixed(1)})"/>`}return o};
+const line=(keys,cls)=>`<polyline class="rt ${cls||''}" points="${keys.map(k=>P(PL[k].lon,PL[k].lat).map(v=>v.toFixed(1)).join(',')).join(' ')}"/>`+(cls==='faint'?'':arrows(keys,cls));
+const stops=(keys,dim,seq)=>{const sq=(seq||[]).filter(k=>!PL[k].hide);return [...new Set(keys)].filter(k=>!PL[k].hide).map(k=>{const p=PL[k],[x,y]=P(p.lon,p.lat),n=sq.indexOf(k)+1,g=n?6:0,dx=p.l[0]+Math.sign(p.l[0])*g,dy=p.l[2]==='middle'?p.l[1]+Math.sign(p.l[1])*g:p.l[1];return (n?`<circle class="stop" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="12"/><text class="num" x="${x.toFixed(1)}" y="${(y+5.5).toFixed(1)}" text-anchor="middle">${n}</text>`:`<circle class="stop ${dim&&!dim.has(k)?'dim':''}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6"/>`)+`<text x="${(x+dx).toFixed(1)}" y="${(y+dy).toFixed(1)}" text-anchor="${p.l[2]}">${esc(p.n)}</text>`}).join('')};
+function drawMap(svg,routes){
+  const main=routes.filter(r=>!r.cls),on=new Set(main.flatMap(r=>r.k));
+  const all=routes.flatMap(r=>r.k);
+  svg.innerHTML=base()+routes.filter(r=>r.cls).map(r=>line(r.k,r.cls)).join('')+main.map(r=>line(r.k)).join('')+stops(all,on,main.length?main[0].k:[]);
+}
+
+/* ---------- Sapporo subway sketch for the free day ---------- */
+const metro=`<svg class="metro" viewBox="0 0 600 350" role="img" aria-label="札幌地鐵和 JR 示意圖"><rect class="land" width="600" height="350"/>
+<path class="ln" style="stroke:#7d8b96" d="M380 100V70H70"/><path class="ln" style="stroke:#f39a1e" d="M40 200H390"/><path class="ln" style="stroke:#2ba24c" d="M380 110V275"/><path class="ln" style="stroke:#2a7ad1" d="M400 200V110L470 40"/>
+<path d="M380 275L250 318" fill="none" stroke="var(--mute)" stroke-width="3" stroke-dasharray="6 6"/>
+${[[70,70],[40,200],[170,200],[270,200],[250,318],[380,275],[470,40]].map(([x,y])=>`<circle class="stop" cx="${x}" cy="${y}" r="7"/>`).join('')}
+<rect x="370" y="100" width="40" height="20" rx="10" class="stop"/><rect x="370" y="190" width="40" height="20" rx="10" class="stop"/>
+<text x="70" y="98" text-anchor="middle">手稻</text><g class="lk2"><text x="70" y="120" text-anchor="middle">手稻神社</text></g><text x="40" y="228" text-anchor="middle">宮之澤</text><text x="170" y="228" text-anchor="middle">二十四軒</text><text x="270" y="228" text-anchor="middle">圓山公園</text>
+<g class="lk2"><text x="24" y="182">白色戀人公園</text><text x="170" y="182" text-anchor="middle">場外市場</text><text x="270" y="182" text-anchor="middle">北海道神宮</text></g>
+<text x="420" y="196">大通</text><g class="lk2"><text x="420" y="218">大通公園・狸小路</text></g>
+<text x="360" y="104" text-anchor="end">札幌</text><g class="lk2"><text x="360" y="126" text-anchor="end">飯店（北口）</text></g>
+<text x="405" y="280">薄野</text><g class="lk2"><text x="405" y="301">薄野宵夜</text></g>
+<text x="238" y="314" text-anchor="end">纜車入口</text><g class="lk2"><text x="238" y="336" text-anchor="end">藻岩山夜景（選配）</text></g>
+<text x="470" y="24" text-anchor="middle">東區役所前</text><g class="lk2"><text x="488" y="58">啤酒園集合</text></g>
+<text x="16" y="26" style="font-size:14px;fill:var(--mute)">橘＝東西線　綠＝南北線　藍＝東豐線</text><text x="16" y="46" style="font-size:14px;fill:var(--mute)">灰＝JR　虛線＝市電</text></svg>`;
+
+/* ---------- spot introductions ---------- */
+const S={
+ odori:['大通公園 White Illumination','札幌冬天的燈樹節，大通公園一帶掛滿燈飾。','展期到 2027/3/14，晚上點燈','地鐵「大通」站','','大通公園'],
+ susukino:['薄野','札幌最大的鬧區，拉麵、居酒屋、宵夜都在這。','晚上營業到很晚','南北線「薄野」站','','すすきの'],
+ atama:['頭大佛（真駒內瀧野靈園）','安藤忠雄設計、2016 年完成的大佛殿，13.5 公尺的大佛只露出頭。冬天天井開放處大佛頭上會積雪。入口有 33 尊摩艾像和巨石陣。','冬季 10:00–15:00，入場費 1,000 日圓','開車，札幌市中心約 30 分','墓園內禁止踩雪地、禁止空拍；水庭冬季不放水','頭大仏殿'],
+ jozankei:['定山溪溫泉','札幌的奧座敷，溪谷溫泉街，到處有河童雕像。二見足湯半戶外面向豐平川。','二見足湯 9:00–21:00，免費','開車，國道 230 號','毛巾販賣機 300 日圓；二見吊橋冬季不能通行','二見の足湯 定山渓'],
+ nakayama:['中山峠 公路休息站（望羊中山）','國道 230 號山頂的休息站，展望台看羊蹄山。名產是炸馬鈴薯串。','賣店 8:30–17:30','開車，國道 230 號','山路，要趁天亮開過','道の駅 望羊中山'],
+ silo:['筒倉展望台（サイロ展望台）','洞爺湖西北岸高台，一次看到洞爺湖、有珠山、昭和新山。名物洞爺湖焦糖布丁。1–3 月有雪遊廣場（雪上摩托車等）。','冬季 8:30–17:00，免費','開車，國道 230 號','','サイロ展望台'],
+ shikotsu:['支笏湖','以「支笏湖藍」聞名，日本最北的不凍湖。湖畔紅色的山線鐵橋建於 1899 年。','遊客中心冬季 9:30–16:30，週二休','開車，國道 453 號（頭大佛順路）','冰濤祭 2/23 已結束；姬鱒專門店「寿」冬季休業','山線鉄橋 支笏湖'],
+ noboribetsu:['登別地獄谷','火山蒸氣冒個不停的谷地，步道來回約 20 分，冬天岩壁覆雪也很漂亮。溫泉街最上方泉源公園有間歇泉。','全年無休，免費','道央道登別東 IC 下約 15 分','大湯沼停車場冬季不開，天然足湯步道可能封閉','登別地獄谷'],
+ rusutsu:['留壽都度假村','北海道最大的滑雪場之一，橫跨三座山，37 條雪道、總長 42 公里。','','開車','','ルスツリゾート'],
+ niseko:['二世谷','四大雪場共用安努普利山，粉雪聞名，和留壽都車程約 35 分。','','開車','','ニセコ グラン・ヒラフ'],
+ kyogoku:['京極吹出公園','羊蹄山的湧泉，一年到頭不停冒出，旁邊就是公路休息站，可以買東西、上廁所。','全年開放，免費','開車，國道 230 號往京極','湧泉旁坡道結冰很滑','京極 ふきだし公園'],
+ sankaku:['小樽三角市場','小樽站旁的海鮮市場，吃海鮮丼。','','小樽站旁','人氣食堂要領號碼牌，人多可分兩間吃','小樽 三角市場'],
+ art:['小樽藝術村','歷史建築改成的美術館群，彩繪玻璃美術館最推。在堺町通北端，逛完往南走。','冬季 10:00–16:00，週三休；4 館共通券 2,900 日圓','小樽運河附近','','小樽芸術村'],
+ kitaichi:['北一大廳（北一ホール）','北一硝子三號館裡的咖啡廳，明治時期的石造倉庫，全館只靠 167 盞石油燈照明。','9:00–17:30（最後點餐 17:00）','堺町通上，北一硝子三號館內','週末要排隊；要在黃昏去運河之前來','北一ホール 小樽'],
+ sakai:['堺町通','小樽最熱鬧的商店街，北一硝子、LeTAO、音樂盒堂都在這。','','步行','','小樽 堺町通り'],
+ tanuki:['狸小路商店街','有屋頂的長商店街，藥妝、伴手禮、餐廳，營業到比較晚。','','地鐵「大通」或「薄野」站','','狸小路商店街'],
+ shiroi:['白色戀人公園','白色戀人的工廠主題樂園，冬季有 50 週年燈飾。想做客製鐵盒，一開門就到都鐸館（Tudor House）裡的 Photo Shop Memento，約 30 分完成。','10:00 開門；冬季 10:00–19:00，付費區最後入館 16:30','東西線「宮之澤」站步行約 7 分','週六人多，開門就進','白い恋人パーク',['客製鐵盒說明','https://www.shiroikoibitopark.jp/original.html']],
+ jogai:['場外市場','札幌中央批發市場旁的海鮮市場，吃海鮮丼。','店家大多 15:00 收','東西線「二十四軒」站步行約 7 分','','札幌場外市場'],
+ jingu:['北海道神宮・圓山公園','札幌的總鎮守，在圓山公園旁。','','東西線「圓山公園」站步行約 15 分','','北海道神宮'],
+ teine:['手稻神社','手稻地區的總鎮守神社，社殿前有彩色的龍柱。想求御守的人白天來。','神社全天開放，賣御守的地方傍晚前就關','JR 從札幌站到「手稻」站約 15 分鐘，走路約 3 分鐘','不在地鐵沿線，要搭 JR','手稲神社 札幌市手稲区手稲本町2条3丁目4-25'],
+ okura:['大倉山展望台','從跳台頂端俯瞰札幌，看跳台有多陡。','冬季 9:00–17:00，纜椅往返 1,000 日圓','圓山公園站轉搭大倉山接駁巴士','跳台比賽或練習日纜椅停駛','大倉山展望台'],
+ tv:['大通公園・電視塔','札幌市中心的地標。','','東西線「大通」站','','さっぽろテレビ塔'],
+ museum:['札幌啤酒博物館','日本唯一的啤酒博物館，紅磚建築，有付費試飲。就在啤酒園旁邊，想逛的人晚餐前先到。','傍晚就關門；2026/7 改裝後收入館費','東豐線「東區役所前」站步行約 10 分','','サッポロビール博物館'],
+ garden:['札幌啤酒園 開拓使館','成吉思汗烤羊肉，和啤酒博物館在同一個園區。已訂 3/6（週六）晚餐，全員 19:00 在開拓使館門口集合。','11:30–21:00','東豐線「東區役所前」站步行約 10 分，或從飯店搭計程車','遲到超過 30 分鐘會自動取消','サッポロビール園 開拓使館',['訂位的地圖','https://maps.app.goo.gl/MVqxK9m6PnZPxyLz6']],
+ moiwa:['藻岩山夜景','北海道三大夜景之一（另兩個是函館山、天狗山），纜車加迷你纜車上山。','冬季 11:00–22:00，最後上山 21:30；往返 2,100 日圓','計程車約 30 分，或市電「纜車入口」站轉免費接駁','2027 年 3 月下旬年度檢修，出發前確認','もいわ山ロープウェイ'],
+ hokudai:['北海道大學','校園很大，總合博物館免費，有猛獁象模型和棕熊等標本。','博物館 10:00–17:00，週一休','JR 札幌站北口步行約 10 分','下午班機才去得了','北海道大学総合博物館'],
+ akarenga:['紅磚廳舍（北海道廳舊本廳舍）','明治時代的北海道廳舊本廳舍，整修後 2025 年重新開館。','8:45–21:00，300 日圓','JR 札幌站南口步行','','北海道庁旧本庁舎'],
+ tokei:['札幌市時計台','日本現存最古老的鐘塔，原本是札幌農學校的演武場。','9:00–17:00','地鐵「大通」站','','札幌市時計台']
+};
+
+/* ---------- days (from the sheet) ---------- */
+const SL={m:['早上','~9:00'],a:['上午','9–12'],n:['中午','12–14'],p:['下午','14–17'],e:['傍晚','17–19'],v:['晚上','19 後'],ap:['白天','上午–下午']};
+const H_TOYA=['洞爺 TOYA Station Villa','https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9'];
+const H_SPK=['札幌 SAPPORO HOTEL by GRANBELL','https://maps.app.goo.gl/xV72S85uak6mDjLB8'];
+const ski=(n,place,key,extra)=>({d:n,w:{'3/1':'一','3/2':'二','3/3':'三','3/4':'四'}[n],t:`${place}滑雪`,stay:H_TOYA,back:1,r:[{k:['villa','tw',key]}],
+  s:[['m',(n==='3/1'?['到店取雪具（租四天）']:[]).concat([`出發往${place}`])],['a',(n==='3/1'?['和教練會合']:[]).concat([`[[${key==='rsts'?'rusutsu':'niseko'}|${place}]]滑雪`])],['n',['雪場午餐']],['p',[`${place}滑雪`]],['e',(n==='3/4'?['回程順路還雪具']:[]).concat(['採買晚餐食材（如要自煮）','返回洞爺民宿'])],['v',['民宿晚餐'].concat(n==='3/4'?['整理行李']:[])]],
+  tr:'開車',notes:extra||[]});
+const D=[
+ {d:'2/27',w:'六',t:'抵達・機場取車',stay:['札幌（飯店待訂，要有停車場）',''],r:[{k:['cts','kh','spk']}],
+  s:[['m',[]],['a',['各自搭機到新千歲機場','（依各自航班時間）']],['n',[]],['p',['抵達新千歲','新千歲機場取車（搭接駁車到租車店）','走道央道開到札幌，約 1 小時']],['e',['札幌飯店 check-in','車停飯店停車場']],['v',['[[odori|大通公園燈樹節]]（大通站）','[[susukino|薄野]]宵夜（薄野站）']]],
+  tr:'開車（機場取車，走道央道），晚上搭地鐵',notes:['交通日','16:30 機場取車','取車帶駕照正本、日文譯本、護照','2/27 住的飯店要有停車場，且放得下七人座'],ref:[['大通燈節','https://www.threads.com/@wangxiaoyou566/post/DgHRWFmH3x7?xmt=AQG0iPtr18ME91RssdwdIIFMLjr36V4wwtoRZZ-bzW_q1thrB8lb4naMkJtVMWtDZJ0b3khW&slof=1']]},
+ {d:'2/28',w:'日',t:'札幌 → 洞爺',stay:H_TOYA,alt:{
+   A:{name:'A 南線',r:['spk','dbt','sktu','nbr','villa'],
+      s:[['m',['從札幌飯店出發']],['a',['[[atama|頭大佛（真駒內瀧野靈園）]]']],['n',['[[shikotsu|支笏湖]]：山線鐵橋、午餐']],['p',['[[noboribetsu|登別地獄谷]]','登別溫泉街']],['e',['走道央道到洞爺','採買晚餐食材（如要自煮）','抵達洞爺民宿']],['v',['民宿晚餐']]],
+      tr:'開車，大部分走高速',notes:['開車約 4 小時，接近天黑才到民宿','高速公路要付過路費','頭大佛冬季 10:00–15:00，入場費 1,000 日圓']},
+   B:{name:'B 北線',r:['spk','dbt','jzk','nkym','silo','tw','villa'],
+      s:[['m',['從札幌飯店出發']],['a',['[[atama|頭大佛（真駒內瀧野靈園）]]']],['n',['[[jozankei|定山溪]]：足湯、午餐']],['p',['[[nakayama|中山峠 公路休息站]]：吃炸馬鈴薯','[[silo|筒倉展望台]]：看洞爺湖全景','抵達洞爺民宿']],['e',['採買晚餐食材（如要自煮）']],['v',['民宿晚餐']]],
+      tr:'開車，走國道 230 山路',notes:['開車約 2.5 小時，天黑前到民宿','頭大佛冬季 10:00–15:00，入場費 1,000 日圓']}}},
+ ski('3/1','留壽都','rsts',['要找教練','要租滑雪裝備']),
+ ski('3/2','留壽都','rsts'),
+ ski('3/3','留壽都','rsts'),
+ ski('3/4','二世谷','nsk'),
+ {d:'3/5',w:'五',t:'京極・小樽 → 札幌',stay:H_SPK,r:[{k:['villa','tw','kyg','kz','yti','otr','spk']}],
+  s:[['m',['退房出發']],['a',['[[kyogoku|京極吹出公園]]','走國道 5 號經余市，再上後志道到小樽（不要走國道 393）']],['n',['[[sankaku|小樽三角市場]]：午餐']],['p',['[[art|小樽藝術村]] → [[sakai|堺町通]]：從北端的藝術村開始，往南一路逛','[[kitaichi|北一大廳]]：喝下午茶（傍晚前要點餐）']],['e',['小樽運河：黃昏沿運河散步到北運河，看煤氣燈亮起','走札樽道開回札幌飯店停車']],['v',['薄野晚餐','[[tanuki|狸小路]]']]],
+  tr:'開車（國道 5 號，避開毛無峠髮夾彎），晚上開回飯店停車',
+  notes:['不用還車，車停飯店到 3/7','停車：[[https://maps.app.goo.gl/Cu1WM14QiGY9gPzF9|小樽市觀光停車場]]（運河旁），車停一次就好','小樽藝術村冬季傍晚前關門，週三休','京極往小樽：Google 導航會走國道 393（赤井川、毛無峠），冬天急坡加髮夾彎容易打滑，建議改走國道 5 號經余市，再上後志道到小樽。上面的 Google 地圖路線已加上經過共和町小沢，會照國道 5 號走','吹出公園：湧泉旁坡道結冰很滑','三角市場人氣食堂要領號碼牌，人多可分兩間吃','北一大廳最後點餐 17:00，先喝下午茶再去運河'],ref:[['小樽景點','https://www.gltjp.com/zh-hant/article/item/20422/']]},
+ {d:'3/6',w:'六',t:'札幌自由行',stay:H_SPK,metro:true,
+  s:[['m',['飯店早餐']],['ap',['[[free|自由行]]：白天各自行動','點「自由行」看推薦去處和怎麼搭車']],['e',['[[garden|札幌啤酒博物館 開拓使館]] 成吉思汗烤肉','直接在開拓使館門口集合','（東豐線 東區役所前站，或從飯店搭計程車）']],['v',[]]],
+  tr:'地鐵、市電、計程車',notes:['白天各自行動，晚餐全員集合','啤酒園已訂位，全員 19:00 在開拓使館門口集合'],ref:[['札幌景點','https://www.gltjp.com/zh-hant/article/item/20215/']]},
+ {d:'3/7',w:'日',t:'機場還車・回台',stay:['回家',''],r:[{k:['spk','kh','cts']}],
+  s:[['m',['飯店早餐']],['a',['開車到新千歲機場，約 1 小時','先加滿油再還車','還車後搭接駁車到國內線航廈']],['n',['從新千歲機場各自搭機回程','（依各自航班時間）']]],
+  tr:'開車（走道央道，機場還車）',notes:['交通日','16:30 前還車','還車要預留時間：開車、加油、還車、接駁','若是下午班機，早上可去[[hokudai|北大]]、[[akarenga|紅磚廳舍]]、[[tokei|時計台]]']}
+];
+
+/* ---------- rich text: [[key|text]] ---------- */
+const rich=s=>esc(s).replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g,(m,k,t,o,all)=>{
+  k=k.replace(/&amp;/g,'&');
+  if(k.startsWith('http'))return `<a href="${esc(k)}" target="_blank" rel="noopener">${t}</a>`;
+  const P='（）：、，。「」',nx=all[o+m.length],pv=all[o-1];
+  const c=(o===0||P.includes(pv)?' first':'')+(o+m.length===all.length||P.includes(nx)?' last':'');
+  return `<button class="lk${c}" data-open="${esc(k)}">${t}</button>`;});
+
+const gdir=keys=>{const q=keys.filter(k=>PL[k].q).map(k=>PL[k].q),o=q[0],d=q[q.length-1],w=q.slice(1,-1);return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&origin='+encodeURIComponent(o)+'&destination='+encodeURIComponent(d)+(w.length?'&waypoints='+encodeURIComponent(w.join('|')):'')};
+
+let cur=0,alt='A';
+const tabs=document.getElementById('tabs'),day=document.getElementById('day');
+tabs.innerHTML=D.map((x,i)=>`<button class="tab" role="tab" id="t${i}" data-i="${i}" aria-selected="false"><b>${x.d}（${x.w}）</b><span>${esc(x.t)}</span></button>`).join('');
+const hid=x=>{const [m,dd]=x.d.split('/');return 'd'+m.padStart(2,'0')+dd.padStart(2,'0')};
+
+function render(){
+  const x=D[cur],v=x.alt?x.alt[alt]:x;
+  [...tabs.children].forEach((b,i)=>b.setAttribute('aria-selected',i===cur));
+  const slots=v.s.map(([k,ls])=>`<li class="it ${ls.length?'':'none'}"><div class="when"><b>${SL[k][0]}</b><small>${SL[k][1]}</small></div><div>${ls.length?ls.map(l=>`<p>${rich(l)}</p>`).join(''):'<p style="font-weight:400">—</p>'}</div></li>`).join('');
+  const stay=x.stay[1]?`<a href="${esc(x.stay[1])}" target="_blank" rel="noopener">${esc(x.stay[0])}</a>`:esc(x.stay[0]);
+  const keys=x.alt?v.r:(x.r?x.r[0].k:null);
+  const mapCard=x.metro?`<div class="card"><h3>地鐵和 JR 路線</h3><div class="mini">${metro}</div><p class="legend">粗體是推薦去的地方，點「自由行」看完整清單。</p><button class="pill" data-open="free">看自由行推薦</button></div>`
+   :`<div class="card"><h3>今天的路線</h3><div class="mini"><svg id="dm" viewBox="0 0 600 590" role="img" aria-label="${esc(x.d)} 路線示意圖"></svg></div>${x.alt||x.back?`<p class="legend">${x.alt?'紅色實線是目前選的路線，虛線是另一條。':''}${x.back?'傍晚照原路開回民宿。':''}</p>`:''}<a class="gm" href="${gdir(keys)}" target="_blank" rel="noopener">在 Google 地圖開啟${x.back?'去程':''}路線</a></div>`;
+  day.innerHTML=`<section><h2>${x.d}（${x.w}）${esc(x.t)}</h2>
+   ${x.alt?`<p class="sub">兩條路線，前半段一樣，當天看天氣決定</p><div class="seg" role="group" aria-label="2/28 路線">${['A','B'].map(k=>`<button data-alt="${k}" aria-pressed="${alt===k}">${x.alt[k].name}</button>`).join('')}</div><p class="decide">看完頭大佛再決定：預設走 A 南線，大雪或高速公路封閉就改走 B 北線。<br>出發前和看完頭大佛時各查一次：<a href="https://www.drivetraffic.jp/" target="_blank" rel="noopener">高速公路封路資訊（ドラとら）</a>（維護中打不開時改看 <a href="https://www.jartic.or.jp/" target="_blank" rel="noopener">JARTIC</a>）、<a href="https://northern-road.ceri.go.jp/navi/" target="_blank" rel="noopener">中山峠等一般道路（北の道ナビ）</a></p>`:`<p class="sub">住：${stay}</p>`}
+   <ul class="list">${slots}</ul></section>
+   <aside>${mapCard}<div class="card"><dl>${x.alt?`<dt>住哪</dt><dd>${stay}</dd>`:''}<dt>交通</dt><dd>${esc(v.tr)}</dd></dl>
+   ${v.notes&&v.notes.length?`<h3 style="margin-top:14px">備註</h3><ul>${v.notes.map(n=>`<li>${rich(n)}</li>`).join('')}</ul>`:''}
+   ${x.ref?`<h3 style="margin-top:14px">參考資料</h3><ul>${x.ref.map(([t,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join('')}</ul>`:''}</div></aside>`;
+  const dm=document.getElementById('dm');
+  if(dm){const rs=x.alt?[{k:x.alt[alt==='A'?'B':'A'].r,cls:'alt'},{k:v.r}]:[{k:keys}];drawMap(dm,rs)}
+  drawOverview();
+}
+function drawOverview(){
+  const ov=document.getElementById('overview');
+  const routes=[];D.forEach((x,i)=>{if(x.alt){const o=alt==='A'?'B':'A';routes.push({k:x.alt[o].r,cls:i===cur?'alt':'faint'},{k:x.alt[alt].r,cls:i===cur?'':'faint'})}else if(x.r)routes.push({k:x.r[0].k,cls:i===cur?'':'faint'})});
+  const main=routes.filter(r=>!r.cls),on=new Set(main.flatMap(r=>r.k));
+  ov.innerHTML=base()+routes.filter(r=>r.cls).map(r=>line(r.k,r.cls)).join('')+main.map(r=>line(r.k)).join('')+stops(Object.keys(PL),on.size?on:new Set(['spk']),main.length?main[0].k:[]);
+}
+function go(i,push){cur=i;render();if(push){try{history.replaceState(null,'','#'+hid(D[i]))}catch(e){location.hash=hid(D[i])}}}
+
+/* ---------- dialogs ---------- */
+const CAR={h:['','方案一：兩台大車','方案二：一大車一小車'],rows:[
+ ['取車','2/27 16:30 新千歲機場（搭接駁車到租車店）','同左'],
+ ['還車','3/7 16:30 新千歲機場（還車後搭接駁車到國內線航廈，還車時間可提早）','同左'],
+ ['車型','七人座 Hybrid ×2\nVOXY / NOAH / LANDY（車種隨機）','七人座 Hybrid ×1：VOXY / NOAH / LANDY\n＋休旅車 ×1：RAV4 / COROLLA CROSS（車種隨機）'],
+ ['租金','¥118,400 × 2 = ¥236,800','¥118,400 ＋ ¥94,400 = ¥212,800'],
+ ['油錢＋過路費＋ETC 卡','兩台約 ¥31,000–34,000','兩台約 ¥31,000–38,000\n（小車抽到汽油版，油錢會多一點）'],
+ ['合計','約 ¥268,000–271,000\n約 NT$56,300–56,900','約 ¥244,000–251,000\n約 NT$51,200–52,700',1],
+ ['每人（8 人）','約 ¥33,500–34,000\n約 NT$7,000–7,200','約 ¥30,500–31,400\n約 NT$6,400–6,600',1],
+ ['優缺點','空間最寬鬆，人和行李都好放','每人省約 NT$600\n小車是休旅車，雪路較穩\n小車後車廂小，取還車那兩天行李要多放大車，大家行李不要太大']]};
+const FREE=[
+ ['西邊：地鐵東西線沿線',[
+  ['shiroi','白色戀人公園','白色戀人餅乾的工廠，可以參觀、拍照，冬天有燈飾。想做客製鐵盒（印上自己照片的鐵盒）的人，10:00 一開門就到園區裡都鐸館的 Photo Shop Memento 做，約 30 分鐘完成。','東西線「宮之澤」站，走路約 7 分鐘','週六人多，越早到越好'],
+  ['jogai','場外市場','札幌中央批發市場旁的海鮮市場，中午來吃海鮮丼。','東西線「二十四軒」站，走路約 7 分鐘','多數店家 15:00 前就收，不要太晚到'],
+  ['jingu','北海道神宮・圓山公園','札幌最有名的神社，就在圓山公園旁邊，冬天雪景很漂亮。','東西線「圓山公園」站，走路約 15 分鐘',''],
+  ['okura','大倉山展望台','冬季奧運用過的跳台，搭纜椅上到跳台頂端，可以看整個札幌市區，也能感受跳台有多陡。','東西線「圓山公園」站下車，轉搭大倉山接駁巴士','纜椅來回 1,000 日圓；跳台比賽或練習日纜椅會停駛']]],
+ ['更西邊：搭 JR',[
+  ['teine','手稻神社','手稻地區的總鎮守神社，社殿前有彩色的龍柱。想求御守的人白天來。','JR 從札幌站到「手稻」站約 15 分鐘，走路約 3 分鐘','賣御守的地方傍晚前就關，要白天去']]],
+ ['市中心',[
+  ['tv','大通公園・電視塔','札幌市中心的大公園，電視塔就在公園東端，可以上塔看市區。','地鐵「大通」站',''],
+  ['tanuki','狸小路・札幌站周邊百貨','狸小路是有屋頂的長商店街，藥妝、伴手禮、餐廳都集中在這裡，營業到比較晚。札幌站周邊則有 JR Tower、大丸等百貨公司。','狸小路：地鐵「大通」或「薄野」站；百貨：「札幌」站','']]],
+ ['東邊：晚餐的啤酒園旁',[
+  ['museum','札幌啤酒博物館','日本唯一的啤酒博物館，紅磚建築，可以付費試喝。就在晚餐的開拓使館旁邊，想逛的人晚餐前先到。','東豐線「東區役所前」站，走路約 10 分鐘','傍晚就關門']]],
+ ['晚餐後',[
+  ['moiwa','藻岩山夜景','北海道三大夜景之一，搭纜車上山看札幌夜景。吃完成吉思汗還有體力的人再去。','從啤酒園搭計程車約 30 分鐘；或搭市電到「纜車入口」站，轉免費接駁車','纜車來回 2,100 日圓，最後上山 21:30'],
+  ['susukino','薄野宵夜','札幌最大的鬧區，拉麵、居酒屋都開到很晚。','南北線「薄野」站','']]]];
+const d1=document.getElementById('dlg'),d2=document.getElementById('dlg2');
+function show(d,t,html){d.querySelector('h3').textContent=t;d.querySelector('.db').innerHTML=html;if(!d.open){try{d.showModal()}catch(e){d.setAttribute('open','')}}d.querySelector('.db').scrollTop=0}
+function spotHtml(k){const s=S[k];if(!s)return '';return `<p>${esc(s[1])}</p><dl>${s[2]?`<dt>時間・費用</dt><dd>${esc(s[2])}</dd>`:''}<dt>交通</dt><dd>${esc(s[3])}</dd>${s[4]?`<dt>提醒</dt><dd>${esc(s[4])}</dd>`:''}</dl><p style="margin-top:14px"><a class="gm" href="${gq(s[5])}" target="_blank" rel="noopener">在 Google 地圖看位置</a>${s[6]?`　<a class="gm" href="${esc(s[6][1])}" target="_blank" rel="noopener">${esc(s[6][0])}</a>`:''}</p>`}
+function open(k){
+  if(k==='car'){show(d1,'租車方案比較',`<table class="stack"><thead><tr>${CAR.h.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${CAR.rows.map(r=>`<tr class="${r[3]?'hl':''}"><th>${esc(r[0])}</th><td data-l="方案一">${esc(r[1])}</td><td data-l="方案二">${esc(r[2])}</td></tr>`).join('')}</tbody></table><p class="note" style="margin-top:12px">不買 Hokkaido Expressway Pass，只租 ETC 卡（¥1,100/張），過路費還車時結算。估算條件：一台約 900 公里、冬天油耗約 15 km/L、油價約 ¥171/L、匯率 0.21。</p>`);return}
+  if(k==='free'){show(d1,'3/6 自由行推薦',`<p>3/6 白天不排行程，大家各自行動。下面是推薦的去處，照地鐵路線分區，想去哪裡自己挑。晚上 19:00 全員在開拓使館門口集合吃成吉思汗。</p><div class="mini">${metro}</div>${FREE.map(([g,its])=>`<h4 class="grp">${esc(g)}</h4><ul class="recs">${its.map(([sk,n,d,how,note])=>`<li><button class="lk first" data-open2="${sk}">${esc(n)}</button><p>${esc(d)}</p><dl><dt>怎麼去</dt><dd>${esc(how)}</dd>${note?`<dt>注意</dt><dd>${esc(note)}</dd>`:''}</dl></li>`).join('')}</ul>`).join('')}`);return}
+  if(S[k])show(d1,S[k][0],spotHtml(k));
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-open],[data-open2],[data-i],[data-alt]');if(!t)return;
+  if(t.dataset.i){go(+t.dataset.i,true);return}
+  if(t.dataset.alt){alt=t.dataset.alt;render();return}
+  if(t.dataset.open2){const k=t.dataset.open2;show(d2,S[k][0],spotHtml(k));return}
+  open(t.dataset.open);
+});
+for(const d of [d1,d2]){d.querySelector('.x').addEventListener('click',()=>d.close());d.addEventListener('click',e=>{if(e.target===d)d.close()})}
+tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const n=(cur+(e.key==='ArrowRight'?1:D.length-1))%D.length;go(n,true);document.getElementById('t'+n).focus()});
+
+/* ---------- checklist (status from the sheet) ---------- */
+const TODO=[[0,'租車：新千歲機場 2/27 16:30 取車、3/7 16:30 還車'],[0,'札幌住宿 2/27，要有停車場且放得下七人座'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練（3/1 起）'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都 25 小時券（3/1–3/3 留壽都滑雪）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[0,'確認 SAPPORO HOTEL by GRANBELL 停車場放得下七人座（3/5 晚上停到 3/7）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
+document.getElementById('todo').innerHTML=TODO.map(([ok,t])=>`<li><span class="st ${ok?'ok':''}">${ok?'已訂':'待訂'}</span><span>${rich(t)}</span></li>`).join('');
+
+const fromHash=()=>{const h=location.hash.slice(1);const i=D.findIndex(x=>hid(x)===h);return i<0?0:i};
+window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
+go(fromHash());
+}
+</script>
+</body>
+</html>
