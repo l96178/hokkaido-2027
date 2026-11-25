@@ -391,7 +391,7 @@ tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'
 /* ---------- checklist (status from the sheet) ---------- */
 const TODO=[[0,'租車：新千歲機場 2/27 16:30 取車、3/7 16:30 還車'],[0,'札幌住宿 2/27，要有停車場且放得下七人座'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練（3/1 起）'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都 25 小時券（3/1–3/3 留壽都滑雪）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[0,'確認 SAPPORO HOTEL by GRANBELL 停車場放得下七人座（3/5 晚上停到 3/7）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
 // 出發前要訂：狀態和「誰訂」存在 Google 試算表（Apps Script 網頁應用程式）
-const API='';
+const API='https://script.google.com/macros/s/AKfycbxqUOJPbWbdBFF4O4x8N8t58ri71PzDN9bU3wFeDk1lg7oK43AHtRZGRJK6XWzmJqW2WQ/exec';
 const WHO=['各自訂','許','安格斯','Ryan','襄','小砆','小王','大鈞','鈞伴'];
 const tkey=t=>t.replace(/\[\[[^|\]]*\|([^\]]*)\]\]/g,'$1').slice(0,6);
 const TS=TODO.map(([ok,t])=>({t,key:tkey(t),done:!!ok,who:''}));
