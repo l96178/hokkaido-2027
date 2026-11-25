@@ -443,13 +443,29 @@ const drawTodo=()=>{const nd=TS.filter(x=>x.done).length,pg=document.getElementB
   ?`<li><button class="st ${x.done?'ok':''}" data-k="${i}" aria-label="切換訂位狀態">${x.done?'已訂':'待訂'}</button><span class="tx">${rich(x.t)}</span><select class="who ${x.who?'':'empty'}" data-k="${i}" aria-label="誰訂"><option value="">誰訂？</option>${WHO.map(n=>`<option${n===x.who?' selected':''}>${esc(n)}</option>`).join('')}</select></li>`
   :`<li><span class="st ${x.done?'ok':''}">${x.done?'已訂':'待訂'}</span><span class="tx">${rich(x.t)}</span>${x.who?`<span class="whot">${esc(x.who)}</span>`:''}</li>`).join('')};
 const merge=items=>{for(const it of items||[]){const x=TS.find(y=>y.key===String(it.text).slice(0,6));if(x){x.done=!!it.done;x.who=it.who||''}}};
-const save=async(i,patch)=>{const x=TS[i],old={done:x.done,who:x.who};Object.assign(x,patch);drawTodo();note('儲存中…');
+// 9／9 全部訂好時放煙火
+const fireworks=()=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cv=document.createElement('canvas'),cx=cv.getContext('2d'),dpr=Math.min(devicePixelRatio||1,2);
+  cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50';document.body.appendChild(cv);
+  const W=innerWidth,H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.scale(dpr,dpr);
+  const C=['#e63946','#f4a300','#1d8fe1','#2bb673','#c04fd8','#ff6b9a'],R=[],P=[];
+  for(let i=0;i<9;i++)R.push({t:i*260+Math.random()*120,x:W*(.15+Math.random()*.7),y:H,ty:H*(.15+Math.random()*.3),c:C[i%C.length],up:false});
+  let t0=performance.now();
+  const boom=(x,y,c)=>{const n=70;for(let i=0;i<n;i++){const a=Math.PI*2*i/n,v=2+Math.random()*3.5;P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c})}};
+  const f=now=>{const t=now-t0;cx.globalCompositeOperation='destination-out';cx.fillStyle='rgba(0,0,0,.22)';cx.fillRect(0,0,W,H);cx.globalCompositeOperation='source-over';
+    for(const r of R){if(t<r.t||r.done)continue;r.y-=(r.y-r.ty)*.09+3;cx.fillStyle=r.c;cx.beginPath();cx.arc(r.x,r.y,2.4,0,7);cx.fill();if(r.y-r.ty<6){r.done=1;boom(r.x,r.y,r.c)}}
+    for(const q of P){q.x+=q.vx;q.y+=q.vy;q.vx*=.985;q.vy=q.vy*.985+.05;q.l-=.012;if(q.l>0){cx.globalAlpha=q.l;cx.fillStyle=q.c;cx.beginPath();cx.arc(q.x,q.y,2,0,7);cx.fill()}}
+    cx.globalAlpha=1;
+    if(t<6000)requestAnimationFrame(f);else cv.remove()};
+  requestAnimationFrame(f)};
+const allDone=()=>TS.every(y=>y.done);
+const save=async(i,patch)=>{const x=TS[i],old={done:x.done,who:x.who},was=allDone();Object.assign(x,patch);drawTodo();if(!was&&allDone())fireworks();note('儲存中…');
   try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:x.key,...patch})});const j=await r.json();if(j.error)throw new Error(j.error);merge(j.items);drawTodo();note('已存檔，大家看到的是同一份。')}
   catch(e){Object.assign(x,old);drawTodo();note('沒有存成功，請稍後再試。',true)}};
 todoEl.addEventListener('click',e=>{const b=e.target.closest('button.st[data-k]');if(b){const i=+b.dataset.k;save(i,{done:!TS[i].done})}});
 todoEl.addEventListener('change',e=>{const s=e.target.closest('select.who');if(s)save(+s.dataset.k,{who:s.value})});
 drawTodo();
-if(API){note('讀取最新狀態…');fetch(API).then(r=>r.json()).then(j=>{merge(j.items);live=true;drawTodo();note('點「待訂／已訂」可以切換，右邊選誰訂，大家看到的是同一份。')}).catch(()=>note('讀不到最新狀態，下面是之前的紀錄。',true))}
+if(API){note('讀取最新狀態…');fetch(API).then(r=>r.json()).then(j=>{merge(j.items);live=true;drawTodo();if(allDone()&&cur<0)fireworks();note('點「待訂／已訂」可以切換，右邊選誰訂，大家看到的是同一份。')}).catch(()=>note('讀不到最新狀態，下面是之前的紀錄。',true))}
 
 const fromHash=()=>{const h=location.hash.slice(1);if(h==='todo')return -1;const i=D.findIndex(x=>hid(x)===h);return i>=0?i:todayIdx>=0?todayIdx:beforeTrip?-1:0};
 window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
