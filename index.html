@@ -99,7 +99,9 @@ dd{margin:0;font-weight:500}
 .card ul{margin:0;padding-left:1.2em}
 .card li{margin:4px 0}
 @media(min-width:900px){aside{position:sticky;top:12px;align-self:start}}
+[hidden]{display:none!important}
 .todo{background:var(--ice)}
+.todo.band{min-height:60vh}
 .todo h2{font-weight:900;font-size:clamp(24px,3vw,32px);margin:0 0 12px}
 .chks{display:grid;gap:8px 20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,24em),1fr));list-style:none;margin:0;padding:0}
 .chks li{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg);border-radius:12px;border:1px solid var(--line)}
@@ -175,11 +177,11 @@ svg .ln{fill:none;stroke-width:7;stroke-linecap:round}
 
 <nav class="tabs" id="tabs" role="tablist" aria-label="日期"></nav>
 
-<main class="band" style="padding-top:12px">
+<main class="band" id="dayMain" style="padding-top:12px">
   <div class="wrap day" id="day"></div>
 </main>
 
-<section class="todo band">
+<section class="todo band" id="todoSec" hidden>
   <div class="wrap">
     <h2>出發前要訂<span class="prog" id="prog"></span></h2>
     <p class="synch" id="synch" hidden></p>
@@ -348,12 +350,15 @@ const tabs=document.getElementById('tabs'),day=document.getElementById('day');
 // 旅途中（日本時間 2027/2/27–3/7）打開時，標出今天並直接跳到今天
 const jst=new Date(Date.now()+9*3600e3),TODAY=jst.getUTCFullYear()===2027?`${jst.getUTCMonth()+1}/${jst.getUTCDate()}`:'';
 const todayIdx=D.findIndex(x=>x.d===TODAY);
-tabs.innerHTML=D.map((x,i)=>`<button class="tab" role="tab" id="t${i}" data-i="${i}" aria-selected="false"><b>${x.d}（${x.w}）${i===todayIdx?'<span class="today">今天</span>':''}</b><span>${esc(x.t)}</span></button>`).join('');
-const hid=x=>{const [m,dd]=x.d.split('/');return 'd'+m.padStart(2,'0')+dd.padStart(2,'0')};
+const beforeTrip=jst.getTime()<Date.UTC(2027,1,27);
+tabs.innerHTML=`<button class="tab" role="tab" id="tT" data-i="-1" aria-selected="false"><b>出發前要訂</b><span id="tTs"></span></button>`+D.map((x,i)=>`<button class="tab" role="tab" id="t${i}" data-i="${i}" aria-selected="false"><b>${x.d}（${x.w}）${i===todayIdx?'<span class="today">今天</span>':''}</b><span>${esc(x.t)}</span></button>`).join('');
+const hid=x=>{if(!x)return 'todo';const [m,dd]=x.d.split('/');return 'd'+m.padStart(2,'0')+dd.padStart(2,'0')};
 
 function render(){
+  [...tabs.children].forEach((b,i)=>b.setAttribute('aria-selected',i-1===cur));
+  document.getElementById('dayMain').hidden=cur<0;document.getElementById('todoSec').hidden=cur>=0;
+  if(cur<0){drawOverview();return}
   const x=D[cur],v=x.alt?x.alt[alt]:x;
-  [...tabs.children].forEach((b,i)=>b.setAttribute('aria-selected',i===cur));
   const slots=v.s.map(([k,ls])=>`<li class="it ${ls.length?'':'none'}"><div class="when"><b>${SL[k][0]}</b><small>${SL[k][1]}</small></div><div>${ls.length?ls.map(l=>`<p>${rich(l)}</p>`).join(''):'<p style="font-weight:400">—</p>'}</div></li>`).join('');
   const stay=x.stay[1]?`<a href="${esc(x.stay[1])}" target="_blank" rel="noopener">${esc(x.stay[0])}</a>`:esc(x.stay[0]);
   const keys=x.alt?v.r:(x.r?x.r[0].k:null);
@@ -376,7 +381,7 @@ function drawOverview(){
   const main=routes.filter(r=>!r.cls),on=new Set(main.flatMap(r=>r.k));
   ov.innerHTML=base()+routes.filter(r=>r.cls).map(r=>line(r.k,r.cls)).join('')+main.map(r=>line(r.k)).join('')+stops(Object.keys(PL),on.size?on:new Set(['spk']),main.length?main[0].k:[]);
 }
-function go(i,push){cur=i;render();const tb=document.getElementById('t'+i);if(tb)tb.scrollIntoView({block:'nearest',inline:'nearest'});if(push){const y=day.getBoundingClientRect().top-tabs.offsetHeight-8;if(y<0)window.scrollBy({top:y,behavior:'smooth'})}if(push){try{history.replaceState(null,'','#'+hid(D[i]))}catch(e){location.hash=hid(D[i])}}}
+function go(i,push){cur=i;render();const tb=document.getElementById(i<0?'tT':'t'+i);const top=i<0?document.getElementById('todoSec'):day;if(tb)tb.scrollIntoView({block:'nearest',inline:'nearest'});if(push){const y=top.getBoundingClientRect().top-tabs.offsetHeight-8;if(y<0)window.scrollBy({top:y,behavior:'smooth'})}if(push){try{history.replaceState(null,'','#'+hid(D[i]))}catch(e){location.hash=hid(D[i])}}}
 
 /* ---------- dialogs ---------- */
 const CAR={h:['','方案一：兩台大車','方案二：一大車一小車'],rows:[
@@ -422,7 +427,7 @@ document.addEventListener('click',e=>{
   open(t.dataset.open);
 });
 for(const d of [d1,d2]){d.querySelector('.x').addEventListener('click',()=>d.close());d.addEventListener('click',e=>{if(e.target===d)d.close()})}
-tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const n=(cur+(e.key==='ArrowRight'?1:D.length-1))%D.length;go(n,true);document.getElementById('t'+n).focus()});
+tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const N=D.length+1,n=(cur+1+(e.key==='ArrowRight'?1:N-1))%N-1;go(n,true);document.getElementById(n<0?'tT':'t'+n).focus()});
 
 /* ---------- checklist (status from the sheet) ---------- */
 const TODO=[[0,'租車：新千歲機場 2/27 16:30 取車、3/7 16:30 還車'],[0,'札幌住宿 2/27，要有停車場且放得下七人座'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練（3/1 起）'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都 25 小時券（3/1–3/3 留壽都滑雪）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
@@ -434,7 +439,7 @@ const TS=TODO.map(([ok,t])=>({t,key:tkey(t),done:!!ok,who:''}));
 let live=false;
 const todoEl=document.getElementById('todo'),synch=document.getElementById('synch');
 const note=(m,err)=>{synch.hidden=!m;synch.textContent=m||'';synch.classList.toggle('err',!!err)};
-const drawTodo=()=>{const nd=TS.filter(x=>x.done).length,pg=document.getElementById('prog');pg.textContent=`已訂 ${nd}／${TS.length}`;pg.classList.toggle('all',nd===TS.length);todoEl.innerHTML=TS.map((x,i)=>live
+const drawTodo=()=>{const nd=TS.filter(x=>x.done).length,pg=document.getElementById('prog');pg.textContent=`已訂 ${nd}／${TS.length}`;document.getElementById('tTs').textContent=`已訂 ${nd}／${TS.length}`;pg.classList.toggle('all',nd===TS.length);todoEl.innerHTML=TS.map((x,i)=>live
   ?`<li><button class="st ${x.done?'ok':''}" data-k="${i}" aria-label="切換訂位狀態">${x.done?'已訂':'待訂'}</button><span class="tx">${rich(x.t)}</span><select class="who ${x.who?'':'empty'}" data-k="${i}" aria-label="誰訂"><option value="">誰訂？</option>${WHO.map(n=>`<option${n===x.who?' selected':''}>${esc(n)}</option>`).join('')}</select></li>`
   :`<li><span class="st ${x.done?'ok':''}">${x.done?'已訂':'待訂'}</span><span class="tx">${rich(x.t)}</span>${x.who?`<span class="whot">${esc(x.who)}</span>`:''}</li>`).join('')};
 const merge=items=>{for(const it of items||[]){const x=TS.find(y=>y.key===String(it.text).slice(0,6));if(x){x.done=!!it.done;x.who=it.who||''}}};
@@ -446,7 +451,7 @@ todoEl.addEventListener('change',e=>{const s=e.target.closest('select.who');if(s
 drawTodo();
 if(API){note('讀取最新狀態…');fetch(API).then(r=>r.json()).then(j=>{merge(j.items);live=true;drawTodo();note('點「待訂／已訂」可以切換，右邊選誰訂，大家看到的是同一份。')}).catch(()=>note('讀不到最新狀態，下面是之前的紀錄。',true))}
 
-const fromHash=()=>{const h=location.hash.slice(1);const i=D.findIndex(x=>hid(x)===h);return i<0?(todayIdx<0?0:todayIdx):i};
+const fromHash=()=>{const h=location.hash.slice(1);if(h==='todo')return -1;const i=D.findIndex(x=>hid(x)===h);return i>=0?i:todayIdx>=0?todayIdx:beforeTrip?-1:0};
 window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
 go(fromHash());
 new IntersectionObserver(e=>tabs.classList.toggle('stuck',!e[0].isIntersecting),{rootMargin:'-1px 0px 0px 0px'}).observe(document.querySelector('header.top'));
