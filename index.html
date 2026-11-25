@@ -89,6 +89,15 @@ dd{margin:0;font-weight:500}
 .chks li{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg);border-radius:12px;border:1px solid var(--line)}
 .st{flex:none;font-size:13px;font-weight:700;border-radius:8px;padding:2px 8px;background:var(--chip);white-space:nowrap}
 .st.ok{background:var(--ok);color:var(--bg)}
+.chks li .tx{flex:1;min-width:0}
+button.st{border:1px solid #a8d3f2;cursor:pointer;font-family:inherit;color:var(--ink)}
+button.st.ok{border-color:var(--ok);color:#fff}
+button.st:disabled{opacity:.6;cursor:wait}
+.who{flex:none;font:inherit;font-size:14px;color:var(--ink);background:var(--ice);border:1px solid #a8d3f2;border-radius:8px;padding:2px 6px;max-width:7.5em}
+.who.empty{color:var(--mute)}
+.whot{flex:none;font-size:14px;color:var(--mute)}
+.synch{font-size:14px;color:var(--mute);margin:-4px 0 12px}
+.synch.err{color:var(--red)}
 foot,.foot{display:block;color:var(--mute);font-size:14px}
 dialog{border:0;border-radius:18px;padding:0;width:min(720px,94vw);max-height:88vh;background:var(--bg);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
 dialog::backdrop{background:rgba(8,20,32,.55)}
@@ -155,6 +164,7 @@ svg .ln{fill:none;stroke-width:7;stroke-linecap:round}
 <section class="todo band">
   <div class="wrap">
     <h2>出發前要訂</h2>
+    <p class="synch" id="synch" hidden></p>
     <ul class="chks" id="todo"></ul>
   </div>
 </section>
@@ -380,7 +390,25 @@ tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft'
 
 /* ---------- checklist (status from the sheet) ---------- */
 const TODO=[[0,'租車：新千歲機場 2/27 16:30 取車、3/7 16:30 還車'],[0,'札幌住宿 2/27，要有停車場且放得下七人座'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練（3/1 起）'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都 25 小時券（3/1–3/3 留壽都滑雪）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[0,'確認 SAPPORO HOTEL by GRANBELL 停車場放得下七人座（3/5 晚上停到 3/7）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
-document.getElementById('todo').innerHTML=TODO.map(([ok,t])=>`<li><span class="st ${ok?'ok':''}">${ok?'已訂':'待訂'}</span><span>${rich(t)}</span></li>`).join('');
+// 出發前要訂：狀態和「誰訂」存在 Google 試算表（Apps Script 網頁應用程式）
+const API='';
+const WHO=['各自訂','許','安格斯','Ryan','襄','小砆','小王','大鈞','鈞伴'];
+const tkey=t=>t.replace(/\[\[[^|\]]*\|([^\]]*)\]\]/g,'$1').slice(0,6);
+const TS=TODO.map(([ok,t])=>({t,key:tkey(t),done:!!ok,who:''}));
+let live=false;
+const todoEl=document.getElementById('todo'),synch=document.getElementById('synch');
+const note=(m,err)=>{synch.hidden=!m;synch.textContent=m||'';synch.classList.toggle('err',!!err)};
+const drawTodo=()=>{todoEl.innerHTML=TS.map((x,i)=>live
+  ?`<li><button class="st ${x.done?'ok':''}" data-i="${i}" aria-label="切換訂位狀態">${x.done?'已訂':'待訂'}</button><span class="tx">${rich(x.t)}</span><select class="who ${x.who?'':'empty'}" data-i="${i}" aria-label="誰訂"><option value="">誰訂？</option>${WHO.map(n=>`<option${n===x.who?' selected':''}>${esc(n)}</option>`).join('')}</select></li>`
+  :`<li><span class="st ${x.done?'ok':''}">${x.done?'已訂':'待訂'}</span><span class="tx">${rich(x.t)}</span>${x.who?`<span class="whot">${esc(x.who)}</span>`:''}</li>`).join('')};
+const merge=items=>{for(const it of items||[]){const x=TS.find(y=>y.key===String(it.text).slice(0,6));if(x){x.done=!!it.done;x.who=it.who||''}}};
+const save=async(i,patch)=>{const x=TS[i],old={done:x.done,who:x.who};Object.assign(x,patch);drawTodo();note('儲存中…');
+  try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:x.key,...patch})});const j=await r.json();if(j.error)throw new Error(j.error);merge(j.items);drawTodo();note('已存檔，大家看到的是同一份。')}
+  catch(e){Object.assign(x,old);drawTodo();note('沒有存成功，請稍後再試。',true)}};
+todoEl.addEventListener('click',e=>{const b=e.target.closest('button.st[data-i]');if(b){const i=+b.dataset.i;save(i,{done:!TS[i].done})}});
+todoEl.addEventListener('change',e=>{const s=e.target.closest('select.who');if(s)save(+s.dataset.i,{who:s.value})});
+drawTodo();
+if(API){note('讀取最新狀態…');fetch(API).then(r=>r.json()).then(j=>{merge(j.items);live=true;drawTodo();note('點「待訂／已訂」可以切換，右邊選誰訂，大家看到的是同一份。')}).catch(()=>note('讀不到最新狀態，下面是之前的紀錄。',true))}
 
 const fromHash=()=>{const h=location.hash.slice(1);const i=D.findIndex(x=>hid(x)===h);return i<0?0:i};
 window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
