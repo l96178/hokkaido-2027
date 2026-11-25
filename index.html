@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>北海道滑雪行程</title>
+<meta name="description" content="2027/2/27–3/7 北海道滑雪：札幌出發，洞爺住五晚，留壽都、二世谷滑雪，再經小樽回札幌。8 人 2 台車。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="2027 北海道滑雪行程">
+<meta property="og:description" content="2/27–3/7・洞爺住五晚・留壽都和二世谷滑雪・小樽・札幌。點進來看每天的行程、地圖和出發前要訂的清單。">
+<meta property="og:url" content="https://l96178.github.io/hokkaido-2027/">
+<meta property="og:image" content="https://l96178.github.io/hokkaido-2027/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -37,7 +46,14 @@ button{font:inherit;color:inherit}
 .facts b{font-weight:700}
 .big{background:var(--land);border-radius:18px;padding:6px;box-shadow:0 14px 34px rgba(20,90,150,.28)}
 .big svg,.mini svg{display:block;width:100%;height:auto}
-.tabs{display:flex;gap:8px;padding:14px max(5vw,16px) 8px;max-width:calc(1240px + 10vw);margin:0 auto;overflow-x:auto;scrollbar-width:thin}
+.tabs{display:flex;gap:8px;padding:10px max(5vw,16px);overflow-x:auto;scrollbar-width:thin;position:sticky;top:0;z-index:5;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:box-shadow .2s}
+.tabs.stuck{box-shadow:0 4px 14px rgba(20,90,150,.14)}
+.tab .today{display:inline-block;margin-left:6px;font:700 12px/1 system-ui,sans-serif;background:var(--red);color:#fff;border-radius:6px;padding:3px 6px;vertical-align:4px}
+.tab[aria-selected=true] .today{background:#fff;color:var(--red)}
+.prog{font-size:16px;font-weight:700;color:var(--mute);margin-left:10px;white-space:nowrap}
+.prog.all{color:var(--ok)}
+.skl{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0;padding:0;list-style:none}
+.skl a{display:inline-block;background:var(--chip);border:1px solid #a8d3f2;border-radius:10px;padding:6px 12px;font-weight:700;text-decoration:none;color:var(--ink)}
 .tab{flex:none;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:6px 14px;min-height:44px;cursor:pointer;text-align:left;line-height:1.25}
 .tab b{display:block;font:700 22px "Barlow Semi Condensed",sans-serif;white-space:nowrap}
 .tab span{font-size:13px;color:var(--mute);white-space:nowrap}
@@ -165,7 +181,7 @@ svg .ln{fill:none;stroke-width:7;stroke-linecap:round}
 
 <section class="todo band">
   <div class="wrap">
-    <h2>出發前要訂</h2>
+    <h2>出發前要訂<span class="prog" id="prog"></span></h2>
     <p class="synch" id="synch" hidden></p>
     <ul class="chks" id="todo"></ul>
   </div>
@@ -275,9 +291,12 @@ const S={
 const SL={m:['早上','~9:00'],a:['上午','9–12'],n:['中午','12–14'],p:['下午','14–17'],e:['傍晚','17–19'],v:['晚上','19 後'],ap:['白天','上午–下午']};
 const H_TOYA=['洞爺 TOYA Station Villa','https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9'];
 const H_SPK=['札幌 SAPPORO HOTEL by GRANBELL','https://maps.app.goo.gl/xV72S85uak6mDjLB8'];
+// 雪場官方資訊：雪場地圖、纜車開放狀況、即時攝影機
+const SKI={rsts:[['雪場地圖','https://rusutsu.com/en/trail-map/'],['纜車開放狀況','https://rusutsu.com/en/lift-and-trail-status/'],['即時攝影機','https://rusutsu.com/en/live-mountain-cams/']],
+ nsk:[['雪場地圖','https://en.grand-hirafu.jp/snow/maps/'],['纜車開放狀況','https://en.grand-hirafu.jp/snow/status/'],['即時攝影機','https://en.grand-hirafu.jp/livecam/']]};
 const ski=(n,place,key,extra)=>({d:n,w:{'3/1':'一','3/2':'二','3/3':'三','3/4':'四'}[n],t:`${place}滑雪`,stay:H_TOYA,back:1,r:[{k:['villa','tw',key]}],
   s:[['m',(n==='3/1'?['到店取雪具（租四天）']:[]).concat([`出發往${place}`])],['a',(n==='3/1'?['和教練會合']:[]).concat([`[[${key==='rsts'?'rusutsu':'niseko'}|${place}]]滑雪`])],['n',['雪場午餐']],['p',[`${place}滑雪`]],['e',(n==='3/4'?['回程順路還雪具']:[]).concat(['採買晚餐食材（如要自煮）','返回洞爺民宿'])],['v',['民宿晚餐'].concat(n==='3/4'?['整理行李']:[])]],
-  tr:'開車',notes:extra||[]});
+  tr:'開車',notes:extra||[],sk:SKI[key]});
 const D=[
  {d:'2/27',w:'六',t:'抵達・機場取車',stay:['札幌（飯店待訂，要有停車場）',''],r:[{k:['cts','kh','spk']}],
   s:[['m',[]],['a',['各自搭機到新千歲機場','（依各自航班時間）']],['n',[]],['p',['抵達新千歲','新千歲機場取車（搭接駁車到租車店）','走道央道開到札幌，約 1 小時']],['e',['札幌飯店 check-in','車停飯店停車場']],['v',['[[odori|大通公園燈樹節]]（大通站）','[[susukino|薄野]]宵夜（薄野站）']]],
@@ -317,7 +336,10 @@ const gdir=keys=>{const q=keys.filter(k=>PL[k].q).map(k=>PL[k].q),o=q[0],d=q[q.l
 
 let cur=0,alt='A';
 const tabs=document.getElementById('tabs'),day=document.getElementById('day');
-tabs.innerHTML=D.map((x,i)=>`<button class="tab" role="tab" id="t${i}" data-i="${i}" aria-selected="false"><b>${x.d}（${x.w}）</b><span>${esc(x.t)}</span></button>`).join('');
+// 旅途中（日本時間 2027/2/27–3/7）打開時，標出今天並直接跳到今天
+const jst=new Date(Date.now()+9*3600e3),TODAY=jst.getUTCFullYear()===2027?`${jst.getUTCMonth()+1}/${jst.getUTCDate()}`:'';
+const todayIdx=D.findIndex(x=>x.d===TODAY);
+tabs.innerHTML=D.map((x,i)=>`<button class="tab" role="tab" id="t${i}" data-i="${i}" aria-selected="false"><b>${x.d}（${x.w}）${i===todayIdx?'<span class="today">今天</span>':''}</b><span>${esc(x.t)}</span></button>`).join('');
 const hid=x=>{const [m,dd]=x.d.split('/');return 'd'+m.padStart(2,'0')+dd.padStart(2,'0')};
 
 function render(){
@@ -331,7 +353,7 @@ function render(){
   day.innerHTML=`<section><h2>${x.d}（${x.w}）${esc(x.t)}</h2>
    ${x.alt?`<p class="sub">兩條路線，前半段一樣，當天看天氣決定</p><div class="seg" role="group" aria-label="2/28 路線">${['A','B'].map(k=>`<button data-alt="${k}" aria-pressed="${alt===k}">${x.alt[k].name}</button>`).join('')}</div><p class="decide">看完頭大佛再決定：預設走 A 南線，大雪或高速公路封閉就改走 B 北線。<br>出發前和看完頭大佛時各查一次：<a href="https://www.drivetraffic.jp/" target="_blank" rel="noopener">高速公路封路資訊（ドラとら）</a>（維護中打不開時改看 <a href="https://www.jartic.or.jp/" target="_blank" rel="noopener">JARTIC</a>）、<a href="https://northern-road.ceri.go.jp/navi/" target="_blank" rel="noopener">中山峠等一般道路（北の道ナビ）</a></p>`:`<p class="sub">住：${stay}</p>`}
    <ul class="list">${slots}</ul></section>
-   <aside>${mapCard}<div class="card"><dl>${x.alt?`<dt>住哪</dt><dd>${stay}</dd>`:''}<dt>交通</dt><dd>${esc(v.tr)}</dd></dl>
+   <aside>${mapCard}${x.sk?`<div class="card"><h3>雪場資訊（官網）</h3><p class="legend" style="margin:4px 0 0">出發前看一下纜車有沒有開、山上天氣如何。</p><ul class="skl">${x.sk.map(([t,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join('')}</ul></div>`:''}<div class="card"><dl>${x.alt?`<dt>住哪</dt><dd>${stay}</dd>`:''}<dt>交通</dt><dd>${esc(v.tr)}</dd></dl>
    ${v.notes&&v.notes.length?`<h3 style="margin-top:14px">備註</h3><ul>${v.notes.map(n=>`<li>${rich(n)}</li>`).join('')}</ul>`:''}
    ${x.ref?`<h3 style="margin-top:14px">參考資料</h3><ul>${x.ref.map(([t,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join('')}</ul>`:''}</div></aside>`;
   const dm=document.getElementById('dm');
@@ -344,7 +366,7 @@ function drawOverview(){
   const main=routes.filter(r=>!r.cls),on=new Set(main.flatMap(r=>r.k));
   ov.innerHTML=base()+routes.filter(r=>r.cls).map(r=>line(r.k,r.cls)).join('')+main.map(r=>line(r.k)).join('')+stops(Object.keys(PL),on.size?on:new Set(['spk']),main.length?main[0].k:[]);
 }
-function go(i,push){cur=i;render();if(push){try{history.replaceState(null,'','#'+hid(D[i]))}catch(e){location.hash=hid(D[i])}}}
+function go(i,push){cur=i;render();const tb=document.getElementById('t'+i);if(tb)tb.scrollIntoView({block:'nearest',inline:'nearest'});if(push){const y=day.getBoundingClientRect().top-tabs.offsetHeight-8;if(y<0)window.scrollBy({top:y,behavior:'smooth'})}if(push){try{history.replaceState(null,'','#'+hid(D[i]))}catch(e){location.hash=hid(D[i])}}}
 
 /* ---------- dialogs ---------- */
 const CAR={h:['','方案一：兩台大車','方案二：一大車一小車'],rows:[
@@ -403,7 +425,7 @@ const TS=TODO.map(([ok,t])=>({t,key:tkey(t),done:!!ok,who:''}));
 let live=false;
 const todoEl=document.getElementById('todo'),synch=document.getElementById('synch');
 const note=(m,err)=>{synch.hidden=!m;synch.textContent=m||'';synch.classList.toggle('err',!!err)};
-const drawTodo=()=>{todoEl.innerHTML=TS.map((x,i)=>live
+const drawTodo=()=>{const nd=TS.filter(x=>x.done).length,pg=document.getElementById('prog');pg.textContent=`已訂 ${nd}／${TS.length}`;pg.classList.toggle('all',nd===TS.length);todoEl.innerHTML=TS.map((x,i)=>live
   ?`<li><button class="st ${x.done?'ok':''}" data-k="${i}" aria-label="切換訂位狀態">${x.done?'已訂':'待訂'}</button><span class="tx">${rich(x.t)}</span><select class="who ${x.who?'':'empty'}" data-k="${i}" aria-label="誰訂"><option value="">誰訂？</option>${WHO.map(n=>`<option${n===x.who?' selected':''}>${esc(n)}</option>`).join('')}</select></li>`
   :`<li><span class="st ${x.done?'ok':''}">${x.done?'已訂':'待訂'}</span><span class="tx">${rich(x.t)}</span>${x.who?`<span class="whot">${esc(x.who)}</span>`:''}</li>`).join('')};
 const merge=items=>{for(const it of items||[]){const x=TS.find(y=>y.key===String(it.text).slice(0,6));if(x){x.done=!!it.done;x.who=it.who||''}}};
@@ -415,9 +437,10 @@ todoEl.addEventListener('change',e=>{const s=e.target.closest('select.who');if(s
 drawTodo();
 if(API){note('讀取最新狀態…');fetch(API).then(r=>r.json()).then(j=>{merge(j.items);live=true;drawTodo();note('點「待訂／已訂」可以切換，右邊選誰訂，大家看到的是同一份。')}).catch(()=>note('讀不到最新狀態，下面是之前的紀錄。',true))}
 
-const fromHash=()=>{const h=location.hash.slice(1);const i=D.findIndex(x=>hid(x)===h);return i<0?0:i};
+const fromHash=()=>{const h=location.hash.slice(1);const i=D.findIndex(x=>hid(x)===h);return i<0?(todayIdx<0?0:todayIdx):i};
 window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
 go(fromHash());
+new IntersectionObserver(e=>tabs.classList.toggle('stuck',!e[0].isIntersecting),{rootMargin:'-1px 0px 0px 0px'}).observe(document.querySelector('header.top'));
 }
 </script>
 <script>
