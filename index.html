@@ -23,9 +23,9 @@ a{color:inherit}
 button{font:inherit;color:inherit}
 .band{padding:clamp(24px,3.5vw,48px) max(5vw,16px)}
 .wrap{max-width:1240px;margin:0 auto}
-.top{position:relative;overflow:hidden;color:var(--ink);padding-bottom:clamp(96px,11vw,140px);background:radial-gradient(circle,rgba(255,255,255,.65) 1.5px,transparent 2.2px) 0 0/90px 90px,radial-gradient(circle,rgba(255,255,255,.6) 2.4px,transparent 3.2px) 35px 45px/160px 160px,linear-gradient(180deg,#58afea 0%,#97cff5 55%,#dcf0fc 100%)}
-@media(prefers-reduced-motion:no-preference){.top{animation:snow 14s linear infinite}}
-@keyframes snow{to{background-position:20px 90px,75px 205px,0 0}}
+.top{position:relative;overflow:hidden;color:var(--ink);padding-bottom:clamp(96px,11vw,140px);background:linear-gradient(180deg,#58afea 0%,#97cff5 55%,#dcf0fc 100%)}
+.top>canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.top>.wrap{position:relative}
 .hero{position:relative;z-index:1}
 .peaks{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:clamp(80px,10vw,130px);display:block}
 .hero{display:grid;gap:24px;align-items:center}
@@ -141,6 +141,7 @@ svg .ln{fill:none;stroke-width:7;stroke-linecap:round}
 </head>
 <body>
 <header class="top band">
+  <canvas class="snow" aria-hidden="true"></canvas>
   <div class="wrap hero">
     <div>
       <h1>2027 北海道滑雪行程</h1>
@@ -418,6 +419,29 @@ const fromHash=()=>{const h=location.hash.slice(1);const i=D.findIndex(x=>hid(x)
 window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
 go(fromHash());
 }
+</script>
+<script>
+// 標題區的飄雪：遠近三層、大小快慢不同、左右飄動，畫面外或分頁在背景時暫停
+(()=>{const top=document.querySelector('.top'),cv=top&&top.querySelector('canvas.snow');if(!cv||!cv.getContext)return;
+const cx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W=0,H=0,dpr=1,F=[],run=false,seen=true,last=0,wind=0,windT=0;
+const mk=(y)=>{const z=Math.random();const d=z<.55?0:z<.88?1:2; // 0 遠 1 中 2 近
+  const r=[.7+Math.random()*.9,1.4+Math.random()*1.2,2.4+Math.random()*1.8][d];
+  return {x:Math.random()*W,y:y??Math.random()*H,r,d,vy:[14,26,42][d]*(.8+Math.random()*.4),amp:[6,12,20][d]*(.5+Math.random()),ph:Math.random()*6.28,fq:.4+Math.random()*.8,a:[.45,.7,.85][d]*(.7+Math.random()*.3)}};
+const size=()=>{const b=top.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=b.width;H=b.height;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+  const n=Math.min(220,Math.round(W*H/5200));while(F.length<n)F.push(mk());F.length=n;F.forEach(f=>{if(f.x>W)f.x=Math.random()*W;if(f.y>H)f.y=Math.random()*H})};
+const draw=t=>{cx.clearRect(0,0,W,H);for(const f of F){const x=f.x+Math.sin(t*f.fq+f.ph)*f.amp;
+  if(f.d===2){const g=cx.createRadialGradient(x,f.y,0,x,f.y,f.r*1.6);g.addColorStop(0,`rgba(255,255,255,${f.a})`);g.addColorStop(.55,`rgba(255,255,255,${f.a*.6})`);g.addColorStop(1,'rgba(255,255,255,0)');cx.fillStyle=g;cx.beginPath();cx.arc(x,f.y,f.r*1.6,0,6.283);cx.fill()}
+  else{cx.fillStyle=`rgba(255,255,255,${f.a})`;cx.beginPath();cx.arc(x,f.y,f.r,0,6.283);cx.fill()}}};
+const step=now=>{if(!run)return;const dt=Math.min(.05,(now-(last||now))/1000);last=now;const t=now/1000;
+  windT+=dt;wind=Math.sin(windT*.15)*10+Math.sin(windT*.37)*5;
+  for(const f of F){f.y+=f.vy*dt;f.x+=wind*(.4+f.d*.3)*dt;if(f.y-f.r*2>H){Object.assign(f,mk(-f.r*2))}if(f.x<-30)f.x+=W+60;else if(f.x>W+30)f.x-=W+60}
+  draw(t);requestAnimationFrame(step)};
+const sync=()=>{const want=seen&&!document.hidden&&!still;if(want&&!run){run=true;last=0;requestAnimationFrame(step)}else if(!want)run=false};
+size();draw(0);
+new ResizeObserver(()=>{size();if(!run)draw(performance.now()/1000)}).observe(top);
+new IntersectionObserver(e=>{seen=e[0].isIntersecting;sync()}).observe(top);
+document.addEventListener('visibilitychange',sync);sync()})();
 </script>
 </body>
 </html>
