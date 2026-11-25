@@ -75,7 +75,7 @@ button{font:inherit;color:inherit}
 .it p{margin:0 0 2px}
 .it p{font-size:17px}
 .it.none{color:var(--mute)}
-.lk{display:inline;background:#e2f1fc;color:var(--ink);border:1px solid #a8d3f2;border-radius:8px;padding:1px 8px;cursor:pointer;font-weight:inherit;line-height:1.9;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.lk{display:inline;background:#e2f1fc;color:var(--ink);border:1px solid #a8d3f2;border-radius:8px;padding:1px 8px;cursor:pointer;font-weight:inherit;line-height:1.9;text-decoration:none;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .lk{margin:0 .35em}
 .lk.first{margin-left:0}
 .lk.last{margin-right:0}
@@ -341,7 +341,7 @@ const rich=s=>esc(s).replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g,(m,k,t,o,all)=>{
   if(k.startsWith('http'))return `<a href="${esc(k)}" target="_blank" rel="noopener">${t}</a>`;
   const P='（）：、，。「」',nx=all[o+m.length],pv=all[o-1];
   const c=(o===0||P.includes(pv)?' first':'')+(o+m.length===all.length||P.includes(nx)?' last':'');
-  return `<button class="lk${c}" data-open="${esc(k)}">${t}</button>`;});
+  return `<a href="#" role="button" class="lk${c}" data-open="${esc(k)}">${t}</a>`;});
 
 const gdir=keys=>{const q=keys.filter(k=>PL[k].q).map(k=>PL[k].q),o=q[0],d=q[q.length-1],w=q.slice(1,-1);return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&origin='+encodeURIComponent(o)+'&destination='+encodeURIComponent(d)+(w.length?'&waypoints='+encodeURIComponent(w.join('|')):'')};
 
@@ -420,7 +420,7 @@ function open(k){
   if(S[k])show(d1,S[k][0],spotHtml(k));
 }
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-open],[data-open2],[data-i],[data-alt]');if(!t)return;
+  const t=e.target.closest('[data-open],[data-open2],[data-i],[data-alt]');if(!t)return;if(t.tagName==='A')e.preventDefault();
   if(t.dataset.i){go(+t.dataset.i,true);return}
   if(t.dataset.alt){alt=t.dataset.alt;render();return}
   if(t.dataset.open2){const k=t.dataset.open2;show(d2,S[k][0],spotHtml(k));return}
