@@ -163,7 +163,7 @@ svg .ln{fill:none;stroke-width:7;stroke-linecap:round}
   <div class="wrap hero">
     <div>
       <h1>2027 北海道滑雪行程</h1>
-      <p>2/27 大家各自搭機到新千歲機場集合，3/7 從新千歲各自回程。機場取車，札幌出發繞一圈，洞爺住五晚、在留壽都和二世谷滑雪，再經小樽回札幌。</p>
+      <p>2/27 大家各自搭機到新千歲機場，搭 JR 到札幌集合，3/7 再搭 JR 回新千歲各自回程。2/28 在札幌取車出發繞一圈，洞爺住五晚、在留壽都和二世谷滑雪，再經小樽回札幌，3/6 早上還車。</p>
       <ul class="facts">
         <li><b>9</b> 天 2/27–3/7</li>
         <li><b>8</b> 人・<b>2</b> 台車</li>
@@ -207,7 +207,7 @@ const gq=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponen
 
 /* ---------- places on the drawn map ---------- */
 const PL={
- cts:{n:'新千歲機場',lon:141.69,lat:42.79,l:[18,40,'end'],q:'OTS car rental Chitose Airport office'},
+ cts:{n:'新千歲機場',lon:141.69,lat:42.79,l:[18,40,'end'],q:'新千歳空港'},
  spk:{n:'札幌',lon:141.35,lat:43.07,l:[12,-6,'start'],q:'SAPPORO HOTEL by GRANBELL 〒060-0906'},
  dbt:{n:'頭大佛',lon:141.39,lat:42.94,l:[12,6,'start'],q:'頭大仏殿'},
  jzk:{n:'定山溪',lon:141.16,lat:42.97,l:[-12,4,'end'],q:'定山渓温泉'},
@@ -222,7 +222,7 @@ const PL={
  yti:{n:'余市',lon:140.79,lat:43.19,l:[0,26,'middle'],q:'余市駅'},
  otr:{n:'小樽',lon:141.00,lat:43.19,l:[0,26,'middle'],q:'小樽運河'},
  kh:{n:'',lon:141.57,lat:42.98,hide:1},
- gas:{n:'',lon:141.66,lat:42.82,hide:1,q:'コスモ石油 千歳空港站'},
+ orix:{n:'',lon:141.35,lat:43.07,hide:1,q:'オリックスレンタカー 札幌駅前店'},
  tw:{n:'',lon:140.765,lat:42.62,hide:1},
  kz:{n:'',lon:140.665,lat:42.985,hide:1,q:'小沢駅 共和町'}
 };
@@ -276,7 +276,7 @@ const S={
  kitaichi:['北一大廳（北一ホール）','北一硝子三號館裡的咖啡廳，明治時期的石造倉庫，全館只靠 167 盞石油燈照明。','9:00–17:30（最後點餐 17:00）','堺町通上，北一硝子三號館內','週末要排隊；要在黃昏去運河之前來','北一ホール 小樽'],
  amart:['A-Mart 洞爺湖店','民宿附近的超市，滑雪回民宿的路上順路經過。','營業到 19:00','開車，就在回民宿的路上','','A-Mart 洞爺湖店'],
  toyaonsen:['洞爺湖溫泉街（洞爺湖温泉）','洞爺湖南岸的溫泉街，溫泉都集中在這裡，民宿附近沒有。下面兩間晚上也能純泡湯、有停車場。','','從民宿開車約 11 分鐘（走路要 1.5 小時）','','洞爺湖温泉'],
- gas:['COSMO 千歲機場加油站（コスモ石油 千歳空港）','還車前加油的地方，在札幌開往 OTS 租車店的路上，繞過去幾乎不多花時間。','24 小時營業','開車，3/7 導航會先經過這裡','','コスモ石油 千歳空港站'],
+ orix:['Orix 札幌站前店（オリックスレンタカー 札幌駅前店）','我們租車的店，2/28 取車、3/6 還車，兩台七人座。','8:00–19:00','JR 札幌站北口走路約 3 分鐘','取車帶駕照正本、日文譯本、護照；還車前先加滿油','オリックスレンタカー 札幌駅前店'],
  sakai:['堺町通','小樽最熱鬧的商店街，北一硝子、LeTAO、音樂盒堂都在這。','','步行','','小樽 堺町通り'],
  tanuki:['狸小路商店街','有屋頂的長商店街，藥妝、伴手禮、餐廳，營業到比較晚。','','地鐵「大通」或「薄野」站','','狸小路商店街'],
  shiroi:['白色戀人公園','白色戀人的工廠主題樂園，可以參觀生產線、拍照，冬季有 50 週年燈飾。園區裡都鐸館的 Photo Shop Memento 可以做印上自己照片的客製鐵盒。','10:00 開門；冬季 10:00–19:00，付費區最後入館 16:30','東西線「宮之澤」站步行約 7 分','週六人多，開門就進；客製鐵盒人多時要等 1–4 小時','白い恋人パーク',['客製鐵盒官網','https://www.shiroikoibitopark.jp/shop/mement-tudor/']],
@@ -309,16 +309,16 @@ const ski=(n,place,key,extra)=>({d:n,w:{'3/1':'一','3/2':'二','3/3':'三','3/4
   s:[['m',(n==='3/1'?['到店取雪具（租四天）']:[]).concat([`出發往${place}`])],['a',(n==='3/1'?['和教練會合']:[]).concat([`[[${key==='rsts'?'rusutsu':'niseko'}|${place}]]滑雪`])],['n',['雪場午餐']],['p',[`${place}滑雪`]],['e',(n==='3/4'?['回程順路還雪具']:[]).concat(['[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）','返回洞爺民宿'])],['v',['民宿晚餐','[[toyaonsen|洞爺湖溫泉街]]：想泡湯的人開車去，約 11 分鐘'].concat(n==='3/4'?['整理行李']:[])]],
   tr:'開車',notes:extra||[]});
 const D=[
- {d:'2/27',w:'六',t:'抵達・機場取車',stay:['札幌（飯店待訂，要有停車場）',''],r:[{k:['cts','kh','spk']}],
-  s:[['m',[]],['a',['各自搭機到新千歲機場','（依各自航班時間）']],['n',[]],['p',['抵達新千歲','新千歲機場取車（搭接駁車到租車店）','走道央道開到札幌，約 1 小時']],['e',['札幌飯店 check-in','車停飯店停車場']],['v',['[[odori|大通公園燈樹節]]（大通站）','[[susukino|薄野]]宵夜（薄野站）']]],
-  tr:'開車（機場取車，走道央道），晚上搭地鐵',notes:['交通日','16:30 機場取車','取車帶駕照正本、日文譯本、護照','2/27 住的飯店要有停車場，且放得下七人座'],ref:[['大通燈節','https://www.threads.com/@wangxiaoyou566/post/DgHRWFmH3x7?xmt=AQG0iPtr18ME91RssdwdIIFMLjr36V4wwtoRZZ-bzW_q1thrB8lb4naMkJtVMWtDZJ0b3khW&slof=1']]},
+ {d:'2/27',w:'六',t:'抵達・搭 JR 到札幌',stay:['札幌（飯店待訂）',''],tm:'transit',r:[{k:['cts','kh','spk']}],
+  s:[['m',[]],['a',['各自搭機到新千歲機場','（依各自航班時間）']],['n',[]],['p',['抵達新千歲','搭 JR 快速 Airport 號到札幌站，約 40 分鐘']],['e',['札幌飯店 check-in']],['v',['[[odori|大通公園燈樹節]]（大通站）','[[susukino|薄野]]宵夜（薄野站）']]],
+  tr:'JR（快速 Airport 號），晚上搭地鐵',notes:['交通日','JR 新千歲機場到札幌約 40 分鐘，1,230 日圓，可刷 Suica 等 IC 卡'],ref:[['大通燈節','https://www.threads.com/@wangxiaoyou566/post/DgHRWFmH3x7?xmt=AQG0iPtr18ME91RssdwdIIFMLjr36V4wwtoRZZ-bzW_q1thrB8lb4naMkJtVMWtDZJ0b3khW&slof=1']]},
  {d:'2/28',w:'日',t:'札幌 → 洞爺',stay:H_TOYA,alt:{
-   A:{name:'A 南線',r:['spk','dbt','sktu','nbr','villa'],
-      s:[['m',['從札幌飯店出發']],['a',['[[atama|頭大佛（真駒內瀧野靈園）]]']],['n',['[[shikotsu|支笏湖]]：山線鐵橋、午餐']],['p',['[[noboribetsu|登別地獄谷]]','登別溫泉街']],['e',['走道央道到洞爺','[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）','抵達洞爺民宿']],['v',['民宿晚餐']]],
-      tr:'開車，大部分走高速',notes:['開車約 4 小時，接近天黑才到民宿','高速公路要付過路費','頭大佛冬季 10:00–15:00，入場費 1,000 日圓']},
-   B:{name:'B 北線',r:['spk','dbt','jzk','nkym','silo','tw','villa'],
-      s:[['m',['從札幌飯店出發']],['a',['[[atama|頭大佛（真駒內瀧野靈園）]]']],['n',['[[jozankei|定山溪]]：足湯、午餐']],['p',['[[nakayama|中山峠 公路休息站]]：吃炸馬鈴薯','[[silo|筒倉展望台]]：看洞爺湖全景','抵達洞爺民宿']],['e',['[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）']],['v',['民宿晚餐']]],
-      tr:'開車，走國道 230 山路',notes:['開車約 2.5 小時，天黑前到民宿','頭大佛冬季 10:00–15:00，入場費 1,000 日圓']}}},
+   A:{name:'A 南線',r:['spk','dbt','sktu','nbr','villa'],gk:['orix','dbt','sktu','nbr','villa'],
+      s:[['m',['[[orix|Orix 札幌站前店]]：取車','從札幌出發']],['a',['[[atama|頭大佛（真駒內瀧野靈園）]]']],['n',['[[shikotsu|支笏湖]]：山線鐵橋、午餐']],['p',['[[noboribetsu|登別地獄谷]]','登別溫泉街']],['e',['走道央道到洞爺','[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）','抵達洞爺民宿']],['v',['民宿晚餐']]],
+      tr:'開車，大部分走高速',notes:['9:30 在 [[orix|Orix 札幌站前店]] 取車（8:00 開門），帶駕照正本、日文譯本、護照','開車約 4 小時，接近天黑才到民宿','高速公路要付過路費','頭大佛冬季 10:00–15:00，入場費 1,000 日圓']},
+   B:{name:'B 北線',r:['spk','dbt','jzk','nkym','silo','tw','villa'],gk:['orix','dbt','jzk','nkym','silo','tw','villa'],
+      s:[['m',['[[orix|Orix 札幌站前店]]：取車','從札幌出發']],['a',['[[atama|頭大佛（真駒內瀧野靈園）]]']],['n',['[[jozankei|定山溪]]：足湯、午餐']],['p',['[[nakayama|中山峠 公路休息站]]：吃炸馬鈴薯','[[silo|筒倉展望台]]：看洞爺湖全景','抵達洞爺民宿']],['e',['[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）']],['v',['民宿晚餐']]],
+      tr:'開車，走國道 230 山路',notes:['9:30 在 [[orix|Orix 札幌站前店]] 取車（8:00 開門），帶駕照正本、日文譯本、護照','開車約 2.5 小時，天黑前到民宿','頭大佛冬季 10:00–15:00，入場費 1,000 日圓']}}},
  ski('3/1','留壽都','rsts',['要找教練', '要租滑雪裝備', '停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E6%97%A5%E5%B8%B0%E3%82%8A%E9%A7%90%E8%BB%8A%E5%A0%B4|留壽都日歸停車場]]（West 區、飯店旁，冬季免費，導航會開到這裡）', '想從 East 區開始滑：改停 [[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4%20%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%E9%A7%90%E8%BB%8A%E5%A0%B4|East 停車場]]（冬季也免費）']),
  ski('3/2','留壽都','rsts',['停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E6%97%A5%E5%B8%B0%E3%82%8A%E9%A7%90%E8%BB%8A%E5%A0%B4|留壽都日歸停車場]]（West 區、飯店旁，冬季免費，導航會開到這裡）', '想從 East 區開始滑：改停 [[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4%20%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%E9%A7%90%E8%BB%8A%E5%A0%B4|East 停車場]]（冬季也免費）']),
  ski('3/3','留壽都','rsts',['停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E6%97%A5%E5%B8%B0%E3%82%8A%E9%A7%90%E8%BB%8A%E5%A0%B4|留壽都日歸停車場]]（West 區、飯店旁，冬季免費，導航會開到這裡）', '想從 East 區開始滑：改停 [[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4%20%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%E9%A7%90%E8%BB%8A%E5%A0%B4|East 停車場]]（冬季也免費）']),
@@ -326,13 +326,13 @@ const D=[
  {d:'3/5',w:'五',t:'京極・小樽 → 札幌',stay:H_SPK,r:[{k:['villa','tw','kyg','kz','yti','otr','spk']}],
   s:[['m',['退房出發']],['a',['[[kyogoku|京極吹出公園]]','走國道 5 號經余市，再上後志道到小樽（不要走國道 393）']],['n',['[[sankaku|小樽三角市場]]：午餐']],['p',['[[art|小樽藝術村]] → [[sakai|堺町通]]：從北端的藝術村開始，往南一路逛','[[kitaichi|北一大廳]]：喝下午茶（傍晚前要點餐）']],['e',['小樽運河：黃昏沿運河散步到北運河，看煤氣燈亮起','走札樽道開回札幌飯店停車']],['v',['薄野晚餐','[[tanuki|狸小路]]']]],
   tr:'開車（國道 5 號，避開毛無峠髮夾彎），晚上開回飯店停車',
-  notes:['不用還車，車停飯店到 3/7','停車：[[https://maps.app.goo.gl/Cu1WM14QiGY9gPzF9|小樽市觀光停車場]]（運河旁），車停一次就好','小樽藝術村冬季傍晚前關門，週三休','京極往小樽：Google 導航會走國道 393（赤井川、毛無峠），冬天急坡加髮夾彎容易打滑，建議改走國道 5 號經余市，再上後志道到小樽。上面的 Google 地圖路線已加上經過共和町小沢，會照國道 5 號走','吹出公園：湧泉旁坡道結冰很滑','三角市場人氣食堂要領號碼牌，人多可分兩間吃','北一大廳最後點餐 17:00，先喝下午茶再去運河'],ref:[['小樽景點','https://www.gltjp.com/zh-hant/article/item/20422/']]},
+  notes:['車停飯店一晚，3/6 早上還車','停車：[[https://maps.app.goo.gl/Cu1WM14QiGY9gPzF9|小樽市觀光停車場]]（運河旁），車停一次就好','小樽藝術村冬季傍晚前關門，週三休','京極往小樽：Google 導航會走國道 393（赤井川、毛無峠），冬天急坡加髮夾彎容易打滑，建議改走國道 5 號經余市，再上後志道到小樽。上面的 Google 地圖路線已加上經過共和町小沢，會照國道 5 號走','吹出公園：湧泉旁坡道結冰很滑','三角市場人氣食堂要領號碼牌，人多可分兩間吃','北一大廳最後點餐 17:00，先喝下午茶再去運河'],ref:[['小樽景點','https://www.gltjp.com/zh-hant/article/item/20422/']]},
  {d:'3/6',w:'六',t:'札幌自由行',stay:H_SPK,metro:true,
-  s:[['m',['飯店早餐']],['ap',['[[free|自由行]]：白天各自行動','點「自由行」看推薦去處和怎麼搭車']],['e',['[[garden|札幌啤酒博物館 開拓使館]] 成吉思汗烤肉','直接在開拓使館門口集合','（東豐線 東區役所前站，或從飯店搭計程車）']],['v',['[[moiwa|藻岩山夜景]]：晚餐後全員一起去','從啤酒園搭兩台計程車到纜車站，約 30 分鐘']]],
-  tr:'地鐵、市電、計程車',notes:['白天各自行動，晚餐全員集合','啤酒園已訂位，全員 19:00 在開拓使館門口集合','藻岩山纜車最後上山 21:30，晚餐 20:45 前結束出發'],ref:[['札幌景點','https://www.gltjp.com/zh-hant/article/item/20215/']]},
- {d:'3/7',w:'日',t:'機場還車・回台',stay:['回家',''],r:[{k:['spk','kh','gas','cts']}],
-  s:[['m',['飯店早餐']],['a',['開車到新千歲機場，約 1 小時','[[gas|COSMO 千歲機場加油站]]：加滿油','OTS 租車店：還車，再搭接駁車到國內線航廈']],['n',['從新千歲機場各自搭機回程','（依各自航班時間）']]],
-  tr:'開車（走道央道，機場還車）',notes:['交通日','16:30 前還車','還車要預留時間：開車、加油、還車、接駁','導航會先經過加油站再到租車店，加油站 24 小時營業，就在還車的路上','加油收據先留著','若是下午班機，早上可去[[hokudai|北大]]、[[akarenga|紅磚廳舍]]、[[tokei|時計台]]']}
+  s:[['m',['飯店早餐','[[orix|Orix 札幌站前店]]：開車的人去還車']],['ap',['[[free|自由行]]：白天各自行動','點「自由行」看推薦去處和怎麼搭車']],['e',['[[garden|札幌啤酒博物館 開拓使館]] 成吉思汗烤肉','直接在開拓使館門口集合','（東豐線 東區役所前站，或從飯店搭計程車）']],['v',['[[moiwa|藻岩山夜景]]：晚餐後全員一起去','從啤酒園搭兩台計程車到纜車站，約 30 分鐘']]],
+  tr:'早上開車去還車，之後地鐵、市電、計程車',notes:['9:30 前把車還到 [[orix|Orix 札幌站前店]]（8:00 開門），還車前先加滿油','白天各自行動，晚餐全員集合','啤酒園已訂位，全員 19:00 在開拓使館門口集合','藻岩山纜車最後上山 21:30，晚餐 20:45 前結束出發'],ref:[['札幌景點','https://www.gltjp.com/zh-hant/article/item/20215/']]},
+ {d:'3/7',w:'日',t:'搭 JR 到機場・回台',stay:['回家',''],tm:'transit',r:[{k:['spk','kh','cts']}],
+  s:[['m',['飯店早餐']],['a',['搭 JR 快速 Airport 號到新千歲機場，約 40 分鐘']],['n',['從新千歲機場各自搭機回程','（依各自航班時間）']]],
+  tr:'JR（快速 Airport 號）',notes:['交通日','JR 札幌到新千歲機場 1,230 日圓，可刷 Suica 等 IC 卡','若是下午班機，早上可去[[hokudai|北大]]、[[akarenga|紅磚廳舍]]、[[tokei|時計台]]']}
 ];
 
 /* ---------- rich text: [[key|text]] ---------- */
@@ -343,7 +343,7 @@ const rich=s=>esc(s).replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g,(m,k,t,o,all)=>{
   const c=(o===0||P.includes(pv)?' first':'')+(o+m.length===all.length||P.includes(nx)?' last':'');
   return `<a href="#" role="button" class="lk${c}" data-open="${esc(k)}">${t}</a>`;});
 
-const gdir=keys=>{const q=keys.filter(k=>PL[k].q).map(k=>PL[k].q),o=q[0],d=q[q.length-1],w=q.slice(1,-1);return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&origin='+encodeURIComponent(o)+'&destination='+encodeURIComponent(d)+(w.length?'&waypoints='+encodeURIComponent(w.join('|')):'')};
+const gdir=(keys,mode)=>{const q=keys.filter(k=>PL[k].q).map(k=>PL[k].q),o=q[0],d=q[q.length-1],w=q.slice(1,-1);return 'https://www.google.com/maps/dir/?api=1&travelmode='+(mode||'driving')+'&origin='+encodeURIComponent(o)+'&destination='+encodeURIComponent(d)+(w.length?'&waypoints='+encodeURIComponent(w.join('|')):'')};
 
 let cur=0,alt='A';
 const tabs=document.getElementById('tabs'),day=document.getElementById('day');
@@ -363,7 +363,7 @@ function render(){
   const stay=x.stay[1]?`<a href="${esc(x.stay[1])}" target="_blank" rel="noopener">${esc(x.stay[0])}</a>`:esc(x.stay[0]);
   const keys=x.alt?v.r:(x.r?x.r[0].k:null);
   const mapCard=x.metro?`<div class="card"><h3>地鐵和 JR 路線</h3><div class="mini">${metro}</div><p class="legend">粗體是推薦去的地方，點「自由行」看完整清單。</p><button class="pill" data-open="free">看自由行推薦</button></div>`
-   :`<div class="card"><h3>今天的路線</h3><div class="mini"><svg id="dm" viewBox="0 0 600 590" role="img" aria-label="${esc(x.d)} 路線示意圖"></svg></div>${x.alt||x.back?`<p class="legend">${x.alt?'紅色實線是目前選的路線，虛線是另一條。':''}${x.back?'傍晚照原路開回民宿。':''}</p>`:''}<a class="gm" href="${gdir(keys)}" target="_blank" rel="noopener">在 Google 地圖開啟${x.back?'去程':''}路線</a></div>`;
+   :`<div class="card"><h3>今天的路線</h3><div class="mini"><svg id="dm" viewBox="0 0 600 590" role="img" aria-label="${esc(x.d)} 路線示意圖"></svg></div>${x.alt||x.back?`<p class="legend">${x.alt?'紅色實線是目前選的路線，虛線是另一條。':''}${x.back?'傍晚照原路開回民宿。':''}</p>`:''}<a class="gm" href="${gdir(v.gk||keys,x.tm)}" target="_blank" rel="noopener">在 Google 地圖開啟${x.back?'去程':''}路線</a></div>`;
   day.innerHTML=`<section><h2>${x.d}（${x.w}）${esc(x.t)}</h2>
    <p class="sub">住：${stay}</p>
    ${x.alt?`<p class="sub">兩條路線，前半段一樣，當天看天氣決定</p><div class="seg" role="group" aria-label="2/28 路線">${['A','B'].map(k=>`<button data-alt="${k}" aria-pressed="${alt===k}">${x.alt[k].name}</button>`).join('')}</div><p class="decide">看完頭大佛再決定：預設走 A 南線，大雪或高速公路封閉就改走 B 北線。<br>出發前和看完頭大佛時各查一次：<a href="https://www.drivetraffic.jp/" target="_blank" rel="noopener">高速公路封路資訊（ドラとら）</a>（維護中打不開時改看 <a href="https://www.jartic.or.jp/" target="_blank" rel="noopener">JARTIC</a>）、<a href="https://northern-road.ceri.go.jp/navi/" target="_blank" rel="noopener">中山峠等一般道路（北の道ナビ）</a></p>`:''}
@@ -384,15 +384,6 @@ function drawOverview(){
 function go(i,push){cur=i;render();const tb=document.getElementById(i<0?'tT':'t'+i);const top=i<0?document.getElementById('todoSec'):day;if(tb)tb.scrollIntoView({block:'nearest',inline:'nearest'});if(push){const y=top.getBoundingClientRect().top-tabs.offsetHeight-8;if(y<0)window.scrollBy({top:y,behavior:'smooth'})}if(push){try{history.replaceState(null,'','#'+hid(D[i]))}catch(e){location.hash=hid(D[i])}}}
 
 /* ---------- dialogs ---------- */
-const CAR={h:['','方案一：兩台大車','方案二：一大車一小車'],rows:[
- ['取車','2/27 16:30 新千歲機場（搭接駁車到租車店）','同左'],
- ['還車','3/7 16:30 新千歲機場（還車後搭接駁車到國內線航廈，還車時間可提早）','同左'],
- ['車型','七人座 Hybrid ×2\nVOXY / NOAH / LANDY（車種隨機）','七人座 Hybrid ×1：VOXY / NOAH / LANDY\n＋休旅車 ×1：RAV4 / COROLLA CROSS（車種隨機）'],
- ['租金','¥118,400 × 2 = ¥236,800','¥118,400 ＋ ¥94,400 = ¥212,800'],
- ['油錢＋過路費＋ETC 卡','兩台約 ¥31,000–34,000','兩台約 ¥31,000–38,000\n（小車抽到汽油版，油錢會多一點）'],
- ['合計','約 ¥268,000–271,000\n約 NT$56,300–56,900','約 ¥244,000–251,000\n約 NT$51,200–52,700',1],
- ['每人（8 人）','約 ¥33,500–34,000\n約 NT$7,000–7,200','約 ¥30,500–31,400\n約 NT$6,400–6,600',1],
- ['優缺點','空間最寬鬆，人和行李都好放','每人省約 NT$600\n小車是休旅車，雪路較穩\n小車後車廂小，取還車那兩天行李要多放大車，大家行李不要太大']]};
 const FREE=[
  ['西邊：地鐵東西線沿線',[
   ['shiroi','白色戀人公園','白色戀人餅乾的工廠，可以參觀生產線、拍照，冬天有燈飾。想做客製鐵盒（印上自己照片的鐵盒）的人，10:00 一開門就到園區裡都鐸館的 Photo Shop Memento。','東西線「宮之澤」站，走路約 7 分鐘','週六人多，越早到越好。客製鐵盒人多時要等 1–4 小時'],
@@ -415,7 +406,6 @@ const IMG={"atama": ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/
 const figHtml=k=>{const m=IMG[k];return m?`<figure class="ph"><img src="${esc(m[0])}" alt="${esc(S[k][0])}" loading="lazy"><figcaption>照片：<a href="${esc(m[3])}" target="_blank" rel="noopener">${m[1]?esc(m[1])+'，':''}${esc(m[2])}</a></figcaption></figure>`:''};
 function spotHtml(k){const s=S[k];if(!s)return '';return `${figHtml(k)}<p>${esc(s[1])}</p><dl>${s[2]?`<dt>時間・費用</dt><dd>${esc(s[2])}</dd>`:''}<dt>交通</dt><dd>${esc(s[3])}</dd>${s[4]?`<dt>提醒</dt><dd>${esc(s[4])}</dd>`:''}${SPOTMORE[k]?`<dt>${esc(SPOTMORE[k][0])}</dt><dd>${SPOTMORE[k][1].map(t=>`<div>${rich(t)}</div>`).join('')}</dd>`:''}${SPOTSKI[k]?`<dt>雪場資訊</dt><dd><div class="skl">${SKI[SPOTSKI[k]].map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join('')}</div><small style="color:var(--mute)">官網英文頁，出發前看一下纜車有沒有開、山上天氣如何</small></dd>`:''}</dl><p style="margin-top:14px"><a class="gm" href="${gq(s[5])}" target="_blank" rel="noopener">在 Google 地圖看位置</a>${s[6]?`　<a class="gm" href="${esc(s[6][1])}" target="_blank" rel="noopener">${esc(s[6][0])}</a>`:''}</p>`}
 function open(k){
-  if(k==='car'){show(d1,'租車方案比較',`<table class="stack"><thead><tr>${CAR.h.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${CAR.rows.map(r=>`<tr class="${r[3]?'hl':''}"><th>${esc(r[0])}</th><td data-l="方案一">${esc(r[1])}</td><td data-l="方案二">${esc(r[2])}</td></tr>`).join('')}</tbody></table><p class="note" style="margin-top:12px">不買 Hokkaido Expressway Pass，只租 ETC 卡（¥1,100/張），過路費還車時結算。估算條件：一台約 900 公里、冬天油耗約 15 km/L、油價約 ¥171/L、匯率 0.21。</p>`);return}
   if(k==='free'){show(d1,'3/6 自由行推薦',`<p>3/6 白天不排行程，大家各自行動。下面是推薦的去處，照地鐵路線分區，想去哪裡自己挑。晚上 19:00 全員在開拓使館門口集合吃成吉思汗，吃完一起去藻岩山看夜景。</p><div class="mini">${metro}</div>${FREE.map(([g,its])=>`<h4 class="grp">${esc(g)}</h4><ul class="recs">${its.map(([sk,n,d,how,note])=>`<li><button class="lk first" data-open2="${sk}">${esc(n)}</button><p>${esc(d)}</p><dl><dt>怎麼去</dt><dd>${esc(how)}</dd>${note?`<dt>注意</dt><dd>${esc(note)}</dd>`:''}</dl></li>`).join('')}</ul>`).join('')}`);return}
   if(S[k])show(d1,S[k][0],spotHtml(k));
 }
@@ -430,7 +420,7 @@ for(const d of [d1,d2]){d.querySelector('.x').addEventListener('click',()=>d.clo
 tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const N=D.length+1,n=(cur+1+(e.key==='ArrowRight'?1:N-1))%N-1;go(n,true);document.getElementById(n<0?'tT':'t'+n).focus()});
 
 /* ---------- checklist (status from the sheet) ---------- */
-const TODO=[[0,'租車：新千歲機場 2/27 16:30 取車、3/7 16:30 還車'],[0,'札幌住宿 2/27，要有停車場且放得下七人座'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練（3/1 起）'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都 25 小時券（3/1–3/3 留壽都滑雪）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
+const TODO=[[0,'租車：Orix 札幌站前店 2/28 9:30 取車、3/6 9:30 還車，兩台七人座'],[0,'札幌住宿 2/27'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練（3/1 起）'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都 25 小時券（3/1–3/3 留壽都滑雪）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
 // 出發前要訂：狀態和「誰訂」存在 Google 試算表（Apps Script 網頁應用程式）
 const API='https://script.google.com/macros/s/AKfycbxqUOJPbWbdBFF4O4x8N8t58ri71PzDN9bU3wFeDk1lg7oK43AHtRZGRJK6XWzmJqW2WQ/exec';
 const WHO=['各自訂','許','安格斯','Ryan','襄','小砆','小王','大鈞','鈞伴'];
