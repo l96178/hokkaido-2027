@@ -354,9 +354,10 @@ function render(){
   const mapCard=x.metro?`<div class="card"><h3>地鐵和 JR 路線</h3><div class="mini">${metro}</div><p class="legend">粗體是推薦去的地方，點「自由行」看完整清單。</p><button class="pill" data-open="free">看自由行推薦</button></div>`
    :`<div class="card"><h3>今天的路線</h3><div class="mini"><svg id="dm" viewBox="0 0 600 590" role="img" aria-label="${esc(x.d)} 路線示意圖"></svg></div>${x.alt||x.back?`<p class="legend">${x.alt?'紅色實線是目前選的路線，虛線是另一條。':''}${x.back?'傍晚照原路開回民宿。':''}</p>`:''}<a class="gm" href="${gdir(keys)}" target="_blank" rel="noopener">在 Google 地圖開啟${x.back?'去程':''}路線</a></div>`;
   day.innerHTML=`<section><h2>${x.d}（${x.w}）${esc(x.t)}</h2>
-   ${x.alt?`<p class="sub">兩條路線，前半段一樣，當天看天氣決定</p><div class="seg" role="group" aria-label="2/28 路線">${['A','B'].map(k=>`<button data-alt="${k}" aria-pressed="${alt===k}">${x.alt[k].name}</button>`).join('')}</div><p class="decide">看完頭大佛再決定：預設走 A 南線，大雪或高速公路封閉就改走 B 北線。<br>出發前和看完頭大佛時各查一次：<a href="https://www.drivetraffic.jp/" target="_blank" rel="noopener">高速公路封路資訊（ドラとら）</a>（維護中打不開時改看 <a href="https://www.jartic.or.jp/" target="_blank" rel="noopener">JARTIC</a>）、<a href="https://northern-road.ceri.go.jp/navi/" target="_blank" rel="noopener">中山峠等一般道路（北の道ナビ）</a></p>`:`<p class="sub">住：${stay}</p>`}
+   <p class="sub">住：${stay}</p>
+   ${x.alt?`<p class="sub">兩條路線，前半段一樣，當天看天氣決定</p><div class="seg" role="group" aria-label="2/28 路線">${['A','B'].map(k=>`<button data-alt="${k}" aria-pressed="${alt===k}">${x.alt[k].name}</button>`).join('')}</div><p class="decide">看完頭大佛再決定：預設走 A 南線，大雪或高速公路封閉就改走 B 北線。<br>出發前和看完頭大佛時各查一次：<a href="https://www.drivetraffic.jp/" target="_blank" rel="noopener">高速公路封路資訊（ドラとら）</a>（維護中打不開時改看 <a href="https://www.jartic.or.jp/" target="_blank" rel="noopener">JARTIC</a>）、<a href="https://northern-road.ceri.go.jp/navi/" target="_blank" rel="noopener">中山峠等一般道路（北の道ナビ）</a></p>`:''}
    <ul class="list">${slots}</ul></section>
-   <aside>${mapCard}<div class="card"><dl>${x.alt?`<dt>住哪</dt><dd>${stay}</dd>`:''}<dt>交通</dt><dd>${esc(v.tr)}</dd></dl>
+   <aside>${mapCard}<div class="card"><dl><dt>交通</dt><dd>${esc(v.tr)}</dd></dl>
    ${v.notes&&v.notes.length?`<h3 style="margin-top:14px">備註</h3><ul>${v.notes.map(n=>`<li>${rich(n)}</li>`).join('')}</ul>`:''}
    ${x.ref?`<h3 style="margin-top:14px">參考資料</h3><ul>${x.ref.map(([t,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join('')}</ul>`:''}</div></aside>`;
   const dm=document.getElementById('dm');
