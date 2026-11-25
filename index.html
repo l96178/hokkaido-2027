@@ -251,7 +251,7 @@ ${[[70,70],[40,200],[170,200],[270,200],[250,318],[380,275],[470,40]].map(([x,y]
 <text x="420" y="196">大通</text><g class="lk2"><text x="420" y="218">大通公園・狸小路</text></g>
 <text x="360" y="104" text-anchor="end">札幌</text><g class="lk2"><text x="360" y="126" text-anchor="end">飯店（北口）</text></g>
 <text x="405" y="280">薄野</text><g class="lk2"><text x="405" y="301">薄野宵夜</text></g>
-<text x="238" y="314" text-anchor="end">纜車入口</text><g class="lk2"><text x="238" y="336" text-anchor="end">藻岩山夜景（選配）</text></g>
+<text x="238" y="314" text-anchor="end">纜車入口</text><g class="lk2"><text x="238" y="336" text-anchor="end">藻岩山夜景（全員）</text></g>
 <text x="470" y="24" text-anchor="middle">東區役所前</text><g class="lk2"><text x="488" y="58">啤酒園集合</text></g>
 <text x="16" y="26" style="font-size:14px;fill:var(--mute)">橘＝東西線　綠＝南北線　藍＝東豐線</text><text x="16" y="46" style="font-size:14px;fill:var(--mute)">灰＝JR　虛線＝市電</text></svg>`;
 
@@ -273,7 +273,7 @@ const S={
  kitaichi:['北一大廳（北一ホール）','北一硝子三號館裡的咖啡廳，明治時期的石造倉庫，全館只靠 167 盞石油燈照明。','9:00–17:30（最後點餐 17:00）','堺町通上，北一硝子三號館內','週末要排隊；要在黃昏去運河之前來','北一ホール 小樽'],
  sakai:['堺町通','小樽最熱鬧的商店街，北一硝子、LeTAO、音樂盒堂都在這。','','步行','','小樽 堺町通り'],
  tanuki:['狸小路商店街','有屋頂的長商店街，藥妝、伴手禮、餐廳，營業到比較晚。','','地鐵「大通」或「薄野」站','','狸小路商店街'],
- shiroi:['白色戀人公園','白色戀人的工廠主題樂園，冬季有 50 週年燈飾。想做客製鐵盒，一開門就到都鐸館（Tudor House）裡的 Photo Shop Memento，約 30 分完成。','10:00 開門；冬季 10:00–19:00，付費區最後入館 16:30','東西線「宮之澤」站步行約 7 分','週六人多，開門就進','白い恋人パーク',['客製鐵盒說明','https://www.shiroikoibitopark.jp/original.html']],
+ shiroi:['白色戀人公園','白色戀人的工廠主題樂園，可以參觀生產線、拍照，冬季有 50 週年燈飾。','10:00 開門；冬季 10:00–19:00，付費區最後入館 16:30','東西線「宮之澤」站步行約 7 分','週六人多，開門就進；照片客製鐵盒服務已在 2026/11/30 結束','白い恋人パーク'],
  jogai:['場外市場','札幌中央批發市場旁的海鮮市場，吃海鮮丼。','店家大多 15:00 收','東西線「二十四軒」站步行約 7 分','','札幌場外市場'],
  jingu:['北海道神宮・圓山公園','札幌的總鎮守，在圓山公園旁。','','東西線「圓山公園」站步行約 15 分','','北海道神宮'],
  teine:['手稻神社','手稻地區的總鎮守神社，社殿前有彩色的龍柱。想求御守的人白天來。','神社全天開放，賣御守的地方傍晚前就關','JR 從札幌站到「手稻」站約 15 分鐘，走路約 3 分鐘','不在地鐵沿線，要搭 JR','手稲神社 札幌市手稲区手稲本町2条3丁目4-25'],
@@ -318,8 +318,8 @@ const D=[
   tr:'開車（國道 5 號，避開毛無峠髮夾彎），晚上開回飯店停車',
   notes:['不用還車，車停飯店到 3/7','停車：[[https://maps.app.goo.gl/Cu1WM14QiGY9gPzF9|小樽市觀光停車場]]（運河旁），車停一次就好','小樽藝術村冬季傍晚前關門，週三休','京極往小樽：Google 導航會走國道 393（赤井川、毛無峠），冬天急坡加髮夾彎容易打滑，建議改走國道 5 號經余市，再上後志道到小樽。上面的 Google 地圖路線已加上經過共和町小沢，會照國道 5 號走','吹出公園：湧泉旁坡道結冰很滑','三角市場人氣食堂要領號碼牌，人多可分兩間吃','北一大廳最後點餐 17:00，先喝下午茶再去運河'],ref:[['小樽景點','https://www.gltjp.com/zh-hant/article/item/20422/']]},
  {d:'3/6',w:'六',t:'札幌自由行',stay:H_SPK,metro:true,
-  s:[['m',['飯店早餐']],['ap',['[[free|自由行]]：白天各自行動','點「自由行」看推薦去處和怎麼搭車']],['e',['[[garden|札幌啤酒博物館 開拓使館]] 成吉思汗烤肉','直接在開拓使館門口集合','（東豐線 東區役所前站，或從飯店搭計程車）']],['v',[]]],
-  tr:'地鐵、市電、計程車',notes:['白天各自行動，晚餐全員集合','啤酒園已訂位，全員 19:00 在開拓使館門口集合'],ref:[['札幌景點','https://www.gltjp.com/zh-hant/article/item/20215/']]},
+  s:[['m',['飯店早餐']],['ap',['[[free|自由行]]：白天各自行動','點「自由行」看推薦去處和怎麼搭車']],['e',['[[garden|札幌啤酒博物館 開拓使館]] 成吉思汗烤肉','直接在開拓使館門口集合','（東豐線 東區役所前站，或從飯店搭計程車）']],['v',['[[moiwa|藻岩山夜景]]：晚餐後全員一起去','從啤酒園搭兩台計程車到纜車站，約 30 分鐘']]],
+  tr:'地鐵、市電、計程車',notes:['白天各自行動，晚餐全員集合','啤酒園已訂位，全員 19:00 在開拓使館門口集合','藻岩山纜車最後上山 21:30，晚餐 20:45 前結束出發'],ref:[['札幌景點','https://www.gltjp.com/zh-hant/article/item/20215/']]},
  {d:'3/7',w:'日',t:'機場還車・回台',stay:['回家',''],r:[{k:['spk','kh','cts']}],
   s:[['m',['飯店早餐']],['a',['開車到新千歲機場，約 1 小時','先加滿油再還車','還車後搭接駁車到國內線航廈']],['n',['從新千歲機場各自搭機回程','（依各自航班時間）']]],
   tr:'開車（走道央道，機場還車）',notes:['交通日','16:30 前還車','還車要預留時間：開車、加油、還車、接駁','若是下午班機，早上可去[[hokudai|北大]]、[[akarenga|紅磚廳舍]]、[[tokei|時計台]]']}
@@ -381,7 +381,7 @@ const CAR={h:['','方案一：兩台大車','方案二：一大車一小車'],ro
  ['優缺點','空間最寬鬆，人和行李都好放','每人省約 NT$600\n小車是休旅車，雪路較穩\n小車後車廂小，取還車那兩天行李要多放大車，大家行李不要太大']]};
 const FREE=[
  ['西邊：地鐵東西線沿線',[
-  ['shiroi','白色戀人公園','白色戀人餅乾的工廠，可以參觀、拍照，冬天有燈飾。想做客製鐵盒（印上自己照片的鐵盒）的人，10:00 一開門就到園區裡都鐸館的 Photo Shop Memento 做，約 30 分鐘完成。','東西線「宮之澤」站，走路約 7 分鐘','週六人多，越早到越好'],
+  ['shiroi','白色戀人公園','白色戀人餅乾的工廠，可以參觀生產線、拍照，冬天有燈飾。','東西線「宮之澤」站，走路約 7 分鐘','週六人多，越早到越好。照片客製鐵盒服務已在 2026/11/30 結束'],
   ['jogai','場外市場','札幌中央批發市場旁的海鮮市場，中午來吃海鮮丼。','東西線「二十四軒」站，走路約 7 分鐘','多數店家 15:00 前就收，不要太晚到'],
   ['jingu','北海道神宮・圓山公園','札幌最有名的神社，就在圓山公園旁邊，冬天雪景很漂亮。','東西線「圓山公園」站，走路約 15 分鐘',''],
   ['okura','大倉山展望台','冬季奧運用過的跳台，搭纜椅上到跳台頂端，可以看整個札幌市區，也能感受跳台有多陡。','東西線「圓山公園」站下車，轉搭大倉山接駁巴士','纜椅來回 1,000 日圓；跳台比賽或練習日纜椅會停駛']]],
@@ -392,8 +392,7 @@ const FREE=[
   ['tanuki','狸小路・札幌站周邊百貨','狸小路是有屋頂的長商店街，藥妝、伴手禮、餐廳都集中在這裡，營業到比較晚。札幌站周邊則有 JR Tower、大丸等百貨公司。','狸小路：地鐵「大通」或「薄野」站；百貨：「札幌」站','']]],
  ['東邊：晚餐的啤酒園旁',[
   ['museum','札幌啤酒博物館','日本唯一的啤酒博物館，紅磚建築，可以付費試喝。就在晚餐的開拓使館旁邊，想逛的人晚餐前先到。','東豐線「東區役所前」站，走路約 10 分鐘','傍晚就關門']]],
- ['晚餐後',[
-  ['moiwa','藻岩山夜景','北海道三大夜景之一，搭纜車上山看札幌夜景。吃完成吉思汗還有體力的人再去。','從啤酒園搭計程車約 30 分鐘；或搭市電到「纜車入口」站，轉免費接駁車','纜車來回 2,100 日圓，最後上山 21:30'],
+ ['晚上',[
   ['susukino','薄野宵夜','札幌最大的鬧區，拉麵、居酒屋都開到很晚。','南北線「薄野」站','']]]];
 const d1=document.getElementById('dlg'),d2=document.getElementById('dlg2');
 function show(d,t,html){d.querySelector('h3').textContent=t;d.querySelector('.db').innerHTML=html;if(!d.open){try{d.showModal()}catch(e){d.setAttribute('open','')}}d.querySelector('.db').scrollTop=0}
@@ -403,7 +402,7 @@ const figHtml=k=>{const m=IMG[k];return m?`<figure class="ph"><img src="${esc(m[
 function spotHtml(k){const s=S[k];if(!s)return '';return `${figHtml(k)}<p>${esc(s[1])}</p><dl>${s[2]?`<dt>時間・費用</dt><dd>${esc(s[2])}</dd>`:''}<dt>交通</dt><dd>${esc(s[3])}</dd>${s[4]?`<dt>提醒</dt><dd>${esc(s[4])}</dd>`:''}${SPOTSKI[k]?`<dt>雪場資訊</dt><dd><div class="skl">${SKI[SPOTSKI[k]].map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join('')}</div><small style="color:var(--mute)">官網英文頁，出發前看一下纜車有沒有開、山上天氣如何</small></dd>`:''}</dl><p style="margin-top:14px"><a class="gm" href="${gq(s[5])}" target="_blank" rel="noopener">在 Google 地圖看位置</a>${s[6]?`　<a class="gm" href="${esc(s[6][1])}" target="_blank" rel="noopener">${esc(s[6][0])}</a>`:''}</p>`}
 function open(k){
   if(k==='car'){show(d1,'租車方案比較',`<table class="stack"><thead><tr>${CAR.h.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${CAR.rows.map(r=>`<tr class="${r[3]?'hl':''}"><th>${esc(r[0])}</th><td data-l="方案一">${esc(r[1])}</td><td data-l="方案二">${esc(r[2])}</td></tr>`).join('')}</tbody></table><p class="note" style="margin-top:12px">不買 Hokkaido Expressway Pass，只租 ETC 卡（¥1,100/張），過路費還車時結算。估算條件：一台約 900 公里、冬天油耗約 15 km/L、油價約 ¥171/L、匯率 0.21。</p>`);return}
-  if(k==='free'){show(d1,'3/6 自由行推薦',`<p>3/6 白天不排行程，大家各自行動。下面是推薦的去處，照地鐵路線分區，想去哪裡自己挑。晚上 19:00 全員在開拓使館門口集合吃成吉思汗。</p><div class="mini">${metro}</div>${FREE.map(([g,its])=>`<h4 class="grp">${esc(g)}</h4><ul class="recs">${its.map(([sk,n,d,how,note])=>`<li><button class="lk first" data-open2="${sk}">${esc(n)}</button><p>${esc(d)}</p><dl><dt>怎麼去</dt><dd>${esc(how)}</dd>${note?`<dt>注意</dt><dd>${esc(note)}</dd>`:''}</dl></li>`).join('')}</ul>`).join('')}`);return}
+  if(k==='free'){show(d1,'3/6 自由行推薦',`<p>3/6 白天不排行程，大家各自行動。下面是推薦的去處，照地鐵路線分區，想去哪裡自己挑。晚上 19:00 全員在開拓使館門口集合吃成吉思汗，吃完一起去藻岩山看夜景。</p><div class="mini">${metro}</div>${FREE.map(([g,its])=>`<h4 class="grp">${esc(g)}</h4><ul class="recs">${its.map(([sk,n,d,how,note])=>`<li><button class="lk first" data-open2="${sk}">${esc(n)}</button><p>${esc(d)}</p><dl><dt>怎麼去</dt><dd>${esc(how)}</dd>${note?`<dt>注意</dt><dd>${esc(note)}</dd>`:''}</dl></li>`).join('')}</ul>`).join('')}`);return}
   if(S[k])show(d1,S[k][0],spotHtml(k));
 }
 document.addEventListener('click',e=>{
