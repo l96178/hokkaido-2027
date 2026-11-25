@@ -399,14 +399,14 @@ let live=false;
 const todoEl=document.getElementById('todo'),synch=document.getElementById('synch');
 const note=(m,err)=>{synch.hidden=!m;synch.textContent=m||'';synch.classList.toggle('err',!!err)};
 const drawTodo=()=>{todoEl.innerHTML=TS.map((x,i)=>live
-  ?`<li><button class="st ${x.done?'ok':''}" data-i="${i}" aria-label="切換訂位狀態">${x.done?'已訂':'待訂'}</button><span class="tx">${rich(x.t)}</span><select class="who ${x.who?'':'empty'}" data-i="${i}" aria-label="誰訂"><option value="">誰訂？</option>${WHO.map(n=>`<option${n===x.who?' selected':''}>${esc(n)}</option>`).join('')}</select></li>`
+  ?`<li><button class="st ${x.done?'ok':''}" data-k="${i}" aria-label="切換訂位狀態">${x.done?'已訂':'待訂'}</button><span class="tx">${rich(x.t)}</span><select class="who ${x.who?'':'empty'}" data-k="${i}" aria-label="誰訂"><option value="">誰訂？</option>${WHO.map(n=>`<option${n===x.who?' selected':''}>${esc(n)}</option>`).join('')}</select></li>`
   :`<li><span class="st ${x.done?'ok':''}">${x.done?'已訂':'待訂'}</span><span class="tx">${rich(x.t)}</span>${x.who?`<span class="whot">${esc(x.who)}</span>`:''}</li>`).join('')};
 const merge=items=>{for(const it of items||[]){const x=TS.find(y=>y.key===String(it.text).slice(0,6));if(x){x.done=!!it.done;x.who=it.who||''}}};
 const save=async(i,patch)=>{const x=TS[i],old={done:x.done,who:x.who};Object.assign(x,patch);drawTodo();note('儲存中…');
   try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:x.key,...patch})});const j=await r.json();if(j.error)throw new Error(j.error);merge(j.items);drawTodo();note('已存檔，大家看到的是同一份。')}
   catch(e){Object.assign(x,old);drawTodo();note('沒有存成功，請稍後再試。',true)}};
-todoEl.addEventListener('click',e=>{const b=e.target.closest('button.st[data-i]');if(b){const i=+b.dataset.i;save(i,{done:!TS[i].done})}});
-todoEl.addEventListener('change',e=>{const s=e.target.closest('select.who');if(s)save(+s.dataset.i,{who:s.value})});
+todoEl.addEventListener('click',e=>{const b=e.target.closest('button.st[data-k]');if(b){const i=+b.dataset.k;save(i,{done:!TS[i].done})}});
+todoEl.addEventListener('change',e=>{const s=e.target.closest('select.who');if(s)save(+s.dataset.k,{who:s.value})});
 drawTodo();
 if(API){note('讀取最新狀態…');fetch(API).then(r=>r.json()).then(j=>{merge(j.items);live=true;drawTodo();note('點「待訂／已訂」可以切換，右邊選誰訂，大家看到的是同一份。')}).catch(()=>note('讀不到最新狀態，下面是之前的紀錄。',true))}
 
