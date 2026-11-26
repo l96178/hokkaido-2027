@@ -102,7 +102,7 @@ dd{margin:0;font-weight:500}
 [hidden]{display:none!important}
 .todo{background:var(--ice)}
 .todo.band{min-height:60vh}
-.cg{background:var(--bg);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}.cgh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 16px;background:#e3f1fb}.cgh h3{margin:0;font-size:18px;font-weight:900}.cg ul{list-style:none;margin:0;padding:0}.cg li{display:flex;justify-content:space-between;gap:16px;padding:10px 16px;border-top:1px solid var(--line)}.ci{min-width:0}.ci small{display:block;color:var(--mute);font-size:13px;margin-top:2px}.cv{flex:none;text-align:right;white-space:nowrap}.cv small{display:block;color:var(--mute);font-size:13px}.cv .bb{font-size:17px;font-weight:900;color:var(--sky)}.cnote{color:var(--mute);margin:0 0 6px}.cost .est{color:var(--mute);font-size:13px}.ctot{display:flex;flex-wrap:wrap;gap:6px 24px;align-items:baseline;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:0 0 6px}.ctot b{font-size:clamp(26px,4vw,36px);font-weight:900;color:var(--sky)}
+.cg{background:var(--bg);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}.cgh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 16px;background:#e3f1fb}.cgh h3{margin:0;font-size:18px;font-weight:900}.cg ul{list-style:none;margin:0;padding:0}.cg li{display:flex;justify-content:space-between;gap:16px;padding:10px 16px;border-top:1px solid var(--line)}.ci{min-width:0}.ci small{display:block;color:var(--mute);font-size:13px;margin-top:2px}.cv{flex:none;text-align:right;white-space:nowrap}.cv small{display:block;color:var(--mute);font-size:13px}.cv .bb{font-size:17px;font-weight:900;color:var(--sky)}.cnote{color:var(--mute);margin:0 0 6px;white-space:pre-line}.cost .est{color:var(--mute);font-size:13px}.ctot{display:flex;flex-wrap:wrap;gap:6px 24px;align-items:baseline;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:0 0 6px}.ctot b{font-size:clamp(26px,4vw,36px);font-weight:900;color:var(--sky)}
 .todo h2{font-weight:900;font-size:clamp(24px,3vw,32px);margin:0 0 12px}
 .chks{display:grid;gap:8px 20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,24em),1fr));list-style:none;margin:0;padding:0}
 .chks li{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg);border-radius:12px;border:1px solid var(--line)}
@@ -473,7 +473,7 @@ if(API){note('讀取最新狀態…');fetch(API).then(r=>r.json()).then(j=>{merg
 
 /* ---------- 花費預算（每人） ---------- */
 const COST={
- note:'只看預算：每人大概要準備多少。日圓換台幣用 1 日圓＝0.21 台幣。不含機票、餐費、教練、市內交通、溫泉、自由行和購物。',
+ note:'只看預算：每人大概會花多少。日圓換台幣用 1 日圓約=0.21 台幣。\n目前不含機票、餐費、教練、市內交通、溫泉、自由行和購物。',
  total:['約 NT$32,600–34,800','日圓花費約 ¥100,000–111,000，另加住宿 NT$11,500'],
  tab:'每人約 3.3–3.5 萬',
  groups:[
