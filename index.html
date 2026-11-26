@@ -244,7 +244,8 @@ const PL={
  sapgas:{n:'',lon:141.3591,lat:43.0657,hide:1,q:'apollostation Self Sapporo SS'},
  nissan:{n:'',lon:141.35,lat:43.07,hide:1,q:'日産レンタカー 札幌駅東口店'},
  tw:{n:'',lon:140.765,lat:42.62,hide:1},
- kz:{n:'',lon:140.665,lat:42.985,hide:1,q:'小沢駅 共和町'}
+ kz:{n:'',lon:140.665,lat:42.985,hide:1,q:'小沢駅 共和町'},
+ amru:{n:'',lon:140.895,lat:42.748,hide:1,q:'アミューズレンタル ルスツ店 留寿都村泉川144-4'}
 };
 const W=600,H=590,L0=140.52,L1=141.82,A0=42.36,A1=43.30;
 const P=(lon,lat)=>[(lon-L0)/(L1-L0)*W,(A1-lat)/(A1-A0)*H];
@@ -294,6 +295,8 @@ const S={
  sankaku:['小樽三角市場','小樽站旁的海鮮市場，吃海鮮丼。','','小樽站旁','人氣食堂要領號碼牌，人多可分兩間吃','小樽 三角市場'],
  art:['小樽藝術村','歷史建築改成的美術館群，彩繪玻璃美術館最推。在堺町通北端，逛完往南走。','冬季 10:00–16:00，週三休；4 館共通券 2,900 日圓','小樽運河附近','','小樽芸術村'],
  kitaichi:['北一大廳（北一ホール）','北一硝子三號館裡的咖啡廳，明治時期的石造倉庫，全館只靠 167 盞石油燈照明。','9:00–17:30（最後點餐 17:00）','堺町通上，北一硝子三號館內','週末要排隊；要在黃昏去運河之前來','北一ホール 小樽'],
+ amru:['Amuse Rental 留壽都店（アミューズレンタル ルスツ店）','我們租雪具的店。3/1 早上在這裡取，租四天（3/1–3/4），3/4 在二世谷店還。','8:00–18:00（最後入店 17:30）','留壽都度假村對面，國道紅綠燈前','網路價要在租借日 5 天前訂好；預約時填身高、體重、鞋子尺寸','アミューズレンタル ルスツ店 留寿都村泉川144-4'],
+ amni:['Amuse Rental 二世谷店（アミューズレンタル ニセコ店）','3/4 滑完在這裡還雪具，在 Hirafu 一帶。','8:00–18:00（最後入店 17:30）','俱知安町樺山 57-14','17:30 前要到店','アミューズレンタル ニセコ店 倶知安町樺山57-14'],
  amart:['A-Mart 洞爺湖店','民宿附近的超市，滑雪回民宿的路上順路經過。','營業到 19:00','開車，就在回民宿的路上','','A-Mart 洞爺湖店'],
  toyaonsen:['洞爺湖溫泉街（洞爺湖温泉）','洞爺湖南岸的溫泉街，溫泉都集中在這裡，民宿附近沒有。下面兩間晚上也能純泡湯、有停車場。','','從民宿開車約 11 分鐘（走路要 1.5 小時）','','洞爺湖温泉'],
  sapgas:['apollostation 加油站（apollostation Self Sapporo SS）','3/5 從小樽回札幌，開回飯店前在這裡加滿油，隔天直接還車。就在飯店南邊幾百公尺，繞過來只多約 5 分鐘。','每天 3:00–凌晨 2:00','北 3 條東 2 丁目，飯店南邊','自助加油：油種選一般汽油（レギュラー），加滿選「満タン」','apollostation Self Sapporo SS'],
@@ -326,8 +329,8 @@ const SPOTSKI={rusutsu:'rsts',niseko:'nsk'};
 const SPOTMORE={amart:['來不及的話',['[[https://www.google.com/maps/search/?api=1&query=DCM%20Nicot%20%E6%B4%9E%E7%88%BA%E6%B9%96%E7%94%BA|DCM Nicot]]：開車，營業到 20:00','[[https://www.google.com/maps/search/?api=1&query=%E3%82%BB%E3%83%96%E3%83%B3%E3%82%A4%E3%83%AC%E3%83%96%E3%83%B3%20%E8%99%BB%E7%94%B0%E6%9C%AC%E7%94%BA%E5%BA%97|7-Eleven 虻田本町店]]：民宿走路 3 分鐘，24 小時','[[https://www.google.com/maps/search/?api=1&query=%E3%82%BB%E3%82%A4%E3%82%B3%E3%83%BC%E3%83%9E%E3%83%BC%E3%83%88%20%E6%B4%9E%E7%88%BA%E6%B9%96%E7%94%BA%E9%AB%98%E7%A0%82%E7%94%BA|Seicomart 高砂町店]]：民宿走路 13 分鐘，營業到 22:00']],
  toyaonsen:['推薦兩間',['[[https://www.google.com/maps/search/?api=1&query=%E6%B4%9E%E7%88%BA%E6%B9%96%E4%B8%87%E4%B8%96%E9%96%A3%E3%83%9B%E3%83%86%E3%83%AB%E3%83%AC%E3%82%A4%E3%82%AF%E3%82%B5%E3%82%A4%E3%83%89%E3%83%86%E3%83%A9%E3%82%B9|洞爺湖萬世閣]]：13:00–21:00（最後入場 20:00），平日 1,200 日圓、週末 1,500 日圓，有露天和三溫暖；停車場在飯店四周，門口有人引導','[[https://www.google.com/maps/search/?api=1&query=%E6%B4%9E%E7%88%BA%E6%B8%A9%E6%B3%89%E3%83%9B%E3%83%86%E3%83%AB%E8%8F%AF%E7%BE%8E|洞爺溫泉飯店華美]]：12:00–20:00（最後入場 19:30），800 日圓，停車場就在入口旁']],
  niseko:['拍羊蹄山',['Grand Hirafu 是拍羊蹄山最好的雪場之一，越往高處視野越開闊、畫面越乾淨','拍照點：King 4 號吊椅底部、Ace 纜車','早上去最好：山腳偶爾有薄霧，太陽出來就散']]};
-const ski=(n,place,key,extra)=>({d:n,w:{'3/1':'一','3/2':'二','3/3':'三','3/4':'四'}[n],t:`${place}滑雪`,stay:H_TOYA,back:1,r:[{k:['villa','tw',key]}],
-  s:[['m',(n==='3/1'?['到店取雪具（租四天）']:[]).concat([`出發往${place}`])],['a',(n==='3/1'?['和教練會合']:[]).concat([`[[${key==='rsts'?'rusutsu':'niseko'}|${place}]]滑雪`])],['n',['雪場午餐']],['p',[`${place}滑雪`]],['e',(n==='3/4'?['回程順路還雪具']:[]).concat(['[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）','返回洞爺民宿'])],['v',['民宿晚餐','[[toyaonsen|洞爺湖溫泉街]]：想泡湯的人開車去，約 11 分鐘'].concat(n==='3/4'?['整理行李']:[])]],
+const ski=(n,place,key,extra)=>({d:n,w:{'3/1':'一','3/2':'二','3/3':'三','3/4':'四'}[n],t:`${place}滑雪`,stay:H_TOYA,back:1,r:[{k:['villa','tw'].concat(n==='3/1'?['amru']:[],[key])}],
+  s:[['m',[`出發往${place}`].concat(n==='3/1'?['[[amru|Amuse Rental 留壽都店]]：取雪具（租四天）']:[])],['a',(n==='3/1'?['和教練會合']:[]).concat([`[[${key==='rsts'?'rusutsu':'niseko'}|${place}]]滑雪`])],['n',['雪場午餐']],['p',[`${place}滑雪`]],['e',(n==='3/4'?['[[amni|Amuse Rental 二世谷店]]：還雪具']:[]).concat(['[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）','返回洞爺民宿'])],['v',['民宿晚餐','[[toyaonsen|洞爺湖溫泉街]]：想泡湯的人開車去，約 11 分鐘'].concat(n==='3/4'?['整理行李']:[])]],
   tr:'開車',notes:extra||[]});
 const D=[
  {d:'2/27',w:'六',t:'抵達・搭 JR 到札幌',stay:['札幌 三井花園飯店西','https://www.google.com/maps/search/?api=1&query=%E4%B8%89%E4%BA%95%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%E3%83%9B%E3%83%86%E3%83%AB%E6%9C%AD%E5%B9%8C%E3%82%A6%E3%82%A8%E3%82%B9%E3%83%88'],tm:'transit',r:[{k:['cts','kh','mgh']}],
@@ -340,10 +343,10 @@ const D=[
    B:{name:'B 北線',r:['spk','dbt','jzk','nkym','silo','tw','villa'],gk:['nissan','dbt','jzk','nkym','silo','tw','villa'],
       s:[['m',['[[nissan|日產札幌站東口店]]：取車','從札幌出發']],['a',['[[atama|頭大佛（真駒內瀧野靈園）]]']],['n',['[[jozankei|定山溪]]：足湯、午餐']],['p',['[[nakayama|中山峠 公路休息站]]：吃炸馬鈴薯','[[silo|筒倉展望台]]：看洞爺湖全景','抵達洞爺民宿']],['e',['[[amart|A-Mart 洞爺湖店]]：採買晚餐食材（如要自煮）']],['v',['民宿晚餐']]],
       tr:'開車，走國道 230 山路',notes:['9:30 在 [[nissan|日產札幌站東口店]] 取車（8:00 開門），帶駕照正本、日文譯本、護照','開車約 2.5 小時，天黑前到民宿','頭大佛冬季 10:00–15:00，入場費 1,000 日圓']}}},
- ski('3/1','留壽都','rsts',['要找教練', '要租滑雪裝備', '停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E6%97%A5%E5%B8%B0%E3%82%8A%E9%A7%90%E8%BB%8A%E5%A0%B4|留壽都日歸停車場]]（West 區、飯店旁，冬季免費，導航會開到這裡）', '想從 East 區開始滑：改停 [[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4%20%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%E9%A7%90%E8%BB%8A%E5%A0%B4|East 停車場]]（冬季也免費）']),
+ ski('3/1','留壽都','rsts',['要找教練', '8:30 在 [[amru|Amuse Rental 留壽都店]] 取雪具（8:00 開門），就在留壽都度假村對面', '停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E6%97%A5%E5%B8%B0%E3%82%8A%E9%A7%90%E8%BB%8A%E5%A0%B4|留壽都日歸停車場]]（West 區、飯店旁，冬季免費，導航會開到這裡）', '想從 East 區開始滑：改停 [[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4%20%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%E9%A7%90%E8%BB%8A%E5%A0%B4|East 停車場]]（冬季也免費）']),
  ski('3/2','留壽都','rsts',['停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E6%97%A5%E5%B8%B0%E3%82%8A%E9%A7%90%E8%BB%8A%E5%A0%B4|留壽都日歸停車場]]（West 區、飯店旁，冬季免費，導航會開到這裡）', '想從 East 區開始滑：改停 [[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4%20%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%E9%A7%90%E8%BB%8A%E5%A0%B4|East 停車場]]（冬季也免費）']),
  ski('3/3','留壽都','rsts',['停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E6%97%A5%E5%B8%B0%E3%82%8A%E9%A7%90%E8%BB%8A%E5%A0%B4|留壽都日歸停車場]]（West 區、飯店旁，冬季免費，導航會開到這裡）', '想從 East 區開始滑：改停 [[https://www.google.com/maps/search/?api=1&query=%E3%83%AB%E3%82%B9%E3%83%84%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4%20%E3%82%A4%E3%83%BC%E3%82%B9%E3%83%88%E9%A7%90%E8%BB%8A%E5%A0%B4|East 停車場]]（冬季也免費）']),
- ski('3/4','二世谷','nsk',['停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%92%E3%83%A9%E3%83%95%E7%AC%AC1%E9%A7%90%E8%BB%8A%E5%A0%B4%20%E5%80%B6%E7%9F%A5%E5%AE%89%E7%94%BA|Hirafu 第 1 停車場]]（Welcome Center 前，導航會開到這裡）', 'Hirafu 第 1 停車場常常一早就停滿，早點出發；旺季有部分車位試辦收費，去年到 2/28 為止']),
+ ski('3/4','二世谷','nsk',['停車：[[https://www.google.com/maps/search/?api=1&query=%E3%83%92%E3%83%A9%E3%83%95%E7%AC%AC1%E9%A7%90%E8%BB%8A%E5%A0%B4%20%E5%80%B6%E7%9F%A5%E5%AE%89%E7%94%BA|Hirafu 第 1 停車場]]（Welcome Center 前，導航會開到這裡）', 'Hirafu 第 1 停車場常常一早就停滿，早點出發；旺季有部分車位試辦收費，去年到 2/28 為止', '滑完 17:30 前到 [[amni|Amuse Rental 二世谷店]] 還雪具']),
  {d:'3/5',w:'五',t:'京極・小樽 → 札幌',stay:H_SPK,r:[{k:['villa','tw','kyg','kz','yti','otr','sapgas','spk']}],
   s:[['m',['退房出發']],['a',['[[kyogoku|京極吹出公園]]','走國道 5 號經余市，再上後志道到小樽（不要走國道 393）']],['n',['[[sankaku|小樽三角市場]]：午餐']],['p',['[[art|小樽藝術村]] → [[sakai|堺町通]]：從北端的藝術村開始，往南一路逛','[[kitaichi|北一大廳]]：喝下午茶（傍晚前要點餐）']],['e',['小樽運河：黃昏沿運河散步到北運河，看煤氣燈亮起','走札樽道回札幌','[[sapgas|apollostation 加油站]]：加滿油，再開回飯店停車']],['v',['薄野晚餐','[[tanuki|狸小路]]']]],
   tr:'開車（國道 5 號，避開毛無峠髮夾彎），晚上開回飯店停車',
@@ -444,7 +447,7 @@ for(const d of [d1,d2]){d.querySelector('.x').addEventListener('click',()=>d.clo
 tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const O=[-1,-3,...(SHOW_COST?[-2]:[]),...D.map((_,i)=>i)],N=O.length,n=O[(O.indexOf(cur)+(e.key==='ArrowRight'?1:N-1))%N];go(n,true);tabEl(n).focus()});
 
 /* ---------- checklist (status from the sheet) ---------- */
-const TODO=[[0,'租車：日產札幌站東口店 2/28 9:30 取車、3/6 9:30 還車，兩台 SERENA'],[1,'札幌住宿 2/27（[[https://www.google.com/maps/search/?api=1&query=%E4%B8%89%E4%BA%95%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%E3%83%9B%E3%83%86%E3%83%AB%E6%9C%AD%E5%B9%8C%E3%82%A6%E3%82%A8%E3%82%B9%E3%83%88|三井花園飯店札幌西]]）'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都雪票（3/1–3/3）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
+const TODO=[[0,'租車：日產札幌站東口店 2/28 9:30 取車、3/6 9:30 還車，兩台 SERENA'],[1,'札幌住宿 2/27（[[https://www.google.com/maps/search/?api=1&query=%E4%B8%89%E4%BA%95%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%E3%83%9B%E3%83%86%E3%83%AB%E6%9C%AD%E5%B9%8C%E3%82%A6%E3%82%A8%E3%82%B9%E3%83%88|三井花園飯店札幌西]]）'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練'],[0,'滑雪裝備租借：[[https://amuse-sports.com/zh-tw/#rental|Amuse Rental]]，3/1 留壽都店取、3/4 二世谷店還，網路價要 2/24 前訂'],[0,'留壽都雪票（3/1–3/3）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
 // 出發前要訂：狀態和「誰訂」存在 Google 試算表（Apps Script 網頁應用程式）
 const API='https://script.google.com/macros/s/AKfycbxqUOJPbWbdBFF4O4x8N8t58ri71PzDN9bU3wFeDk1lg7oK43AHtRZGRJK6XWzmJqW2WQ/exec';
 const WHO=['各自訂','許','安格斯','Ryan','襄','小砆','小王','大鈞','鈞伴'];
