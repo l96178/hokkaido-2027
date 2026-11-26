@@ -361,8 +361,9 @@ const tabs=document.getElementById('tabs'),day=document.getElementById('day');
 // 旅途中（日本時間 2027/2/27–3/7）打開時，標出今天並直接跳到今天
 const jst=new Date(Date.now()+9*3600e3),TODAY=jst.getUTCFullYear()===2027?`${jst.getUTCMonth()+1}/${jst.getUTCDate()}`:'';
 const todayIdx=D.findIndex(x=>x.d===TODAY);
+const SHOW_COST=false; // 花費預算頁先隱藏，改 true 就會出現
 const beforeTrip=jst.getTime()<Date.UTC(2027,1,27);
-tabs.innerHTML=`<button class="tab" role="tab" id="tT" data-i="-1" aria-selected="false"><b>出發前要訂</b><span id="tTs"></span></button><button class="tab" role="tab" id="tC" data-i="-2" aria-selected="false"><b>花費預算</b><span id="tCs"></span></button>`+D.map((x,i)=>`<button class="tab" role="tab" id="t${i}" data-i="${i}" aria-selected="false"><b>${x.d}（${x.w}）${i===todayIdx?'<span class="today">今天</span>':''}</b><span>${esc(x.t)}</span></button>`).join('');
+tabs.innerHTML=`<button class="tab" role="tab" id="tT" data-i="-1" aria-selected="false"><b>出發前要訂</b><span id="tTs"></span></button>`+(SHOW_COST?`<button class="tab" role="tab" id="tC" data-i="-2" aria-selected="false"><b>花費預算</b><span id="tCs"></span></button>`:'')+D.map((x,i)=>`<button class="tab" role="tab" id="t${i}" data-i="${i}" aria-selected="false"><b>${x.d}（${x.w}）${i===todayIdx?'<span class="today">今天</span>':''}</b><span>${esc(x.t)}</span></button>`).join('');
 const hidOf=i=>i===-1?'todo':i===-2?'cost':hid(D[i]);
 const tabEl=i=>document.getElementById(i===-1?'tT':i===-2?'tC':'t'+i);
 const hid=x=>{if(!x)return 'todo';const [m,dd]=x.d.split('/');return 'd'+m.padStart(2,'0')+dd.padStart(2,'0')};
@@ -430,7 +431,7 @@ document.addEventListener('click',e=>{
   open(t.dataset.open);
 });
 for(const d of [d1,d2]){d.querySelector('.x').addEventListener('click',()=>d.close());d.addEventListener('click',e=>{if(e.target===d)d.close()})}
-tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const O=[-1,-2,...D.map((_,i)=>i)],N=O.length,n=O[(O.indexOf(cur)+(e.key==='ArrowRight'?1:N-1))%N];go(n,true);tabEl(n).focus()});
+tabs.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const O=[-1,...(SHOW_COST?[-2]:[]),...D.map((_,i)=>i)],N=O.length,n=O[(O.indexOf(cur)+(e.key==='ArrowRight'?1:N-1))%N];go(n,true);tabEl(n).focus()});
 
 /* ---------- checklist (status from the sheet) ---------- */
 const TODO=[[0,'租車：日產札幌站東口店 2/28 9:30 取車、3/6 9:30 還車，兩台 SERENA'],[0,'札幌住宿 2/27'],[1,'洞爺包棟民宿 2/28–3/4（[[https://maps.app.goo.gl/WJWpX2fF4wpRwpmJ9|TOYA Station Villa]]）'],[0,'滑雪教練（3/1 起）'],[0,'滑雪裝備租借：洞爺或雪場外的店，3/1–3/4 租四天自己帶著走，確認取還時間'],[0,'留壽都雪票（3/1–3/3）'],[0,'二世谷雪票（3/4）'],[1,'札幌住宿 3/5–3/6（[[https://maps.app.goo.gl/xV72S85uak6mDjLB8|SAPPORO HOTEL by GRANBELL]]）'],[1,'[[garden|札幌啤酒園 開拓使館]] 3/6（週六）已訂好，全員 19:00 在開拓使館門口集合']];
@@ -503,8 +504,8 @@ const drawCost=()=>{
    COST.groups.map(([g,y,n,rows])=>`<div class="cg"><div class="cgh"><h3>${g}</h3>${ny(y,n,1)}</div><ul>`+
      rows.map(([a,b,c,d,e])=>`<li><span class="ci">${a}${d||e?`<small>${d}${e?(d?' ':'')+'<span class="est">（估算）</span>':''}</small>`:''}</span>${ny(b,c)}</li>`).join('')+`</ul></div>`).join('');
 };
-drawCost();
-const fromHash=()=>{const h=location.hash.slice(1);if(h==='todo')return -1;if(h==='cost')return -2;const i=D.findIndex(x=>hid(x)===h);return i>=0?i:todayIdx>=0?todayIdx:beforeTrip?-1:0};
+if(SHOW_COST)drawCost();
+const fromHash=()=>{const h=location.hash.slice(1);if(h==='todo')return -1;if(h==='cost'&&SHOW_COST)return -2;const i=D.findIndex(x=>hid(x)===h);return i>=0?i:todayIdx>=0?todayIdx:beforeTrip?-1:0};
 window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
 go(fromHash());
 new IntersectionObserver(e=>tabs.classList.toggle('stuck',!e[0].isIntersecting),{rootMargin:'-1px 0px 0px 0px'}).observe(document.querySelector('header.top'));
