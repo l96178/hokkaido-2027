@@ -405,7 +405,7 @@ function drawOverview(){
   const main=routes.filter(r=>!r.cls),on=new Set(main.flatMap(r=>r.k));
   ov.innerHTML=base()+routes.filter(r=>r.cls).map(r=>line(r.k,r.cls)).join('')+main.map(r=>line(r.k)).join('')+stops(Object.keys(PL),on.size?on:new Set(['spk']),main.length?main[0].k:[]);
 }
-function go(i,push){cur=i;render();const tb=tabEl(i);const top=i===-1?document.getElementById('todoSec'):i===-2?document.getElementById('costSec'):i===-3?document.getElementById('packSec'):day;if(tb)tb.scrollIntoView({block:'nearest',inline:'nearest'});if(push){const y=top.getBoundingClientRect().top-tabs.offsetHeight-8;if(y<0)window.scrollBy({top:y,behavior:'smooth'})}if(push){try{history.replaceState(null,'','#'+hidOf(i))}catch(e){location.hash=hidOf(i)}}if(i===-3&&packDone())fireworks()}
+function go(i,push){cur=i;render();const tb=tabEl(i);const top=i===-1?document.getElementById('todoSec'):i===-2?document.getElementById('costSec'):i===-3?document.getElementById('packSec'):day;if(tb)tb.scrollIntoView({block:'nearest',inline:'nearest'});if(push){const y=top.getBoundingClientRect().top-tabs.offsetHeight-8;if(y<0)window.scrollBy({top:y,behavior:'smooth'})}if(push){try{history.replaceState(null,'','#'+hidOf(i))}catch(e){location.hash=hidOf(i)}}if((i===-3&&packDone())||(i===-1&&allDone()))fireworks()}
 
 /* ---------- dialogs ---------- */
 const FREE=[
