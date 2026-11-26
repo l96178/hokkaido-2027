@@ -526,7 +526,8 @@ const PK='hk27-pack';let pk={};try{pk=JSON.parse(localStorage.getItem(PK)||'{}')
 const packEl=document.getElementById('pack');
 const drawPack=()=>{const all=PACK.flatMap(g=>g[1]),nd=all.filter(t=>pk[t]).length,t=`已準備 ${nd}／${all.length}`;const pg=document.getElementById('packProg');pg.textContent=t;pg.classList.toggle('all',nd===all.length);document.getElementById('tPs').textContent=t;
   packEl.innerHTML=PACK.map(([g,items])=>`<div class="pk"><h3>${g}</h3><ul class="chks">${items.map(x=>`<li><button class="st ${pk[x]?'ok':''}" data-p="${esc(x)}" aria-pressed="${!!pk[x]}">${pk[x]?'已準備':'未準備'}</button><span class="tx">${esc(x)}</span></li>`).join('')}</ul></div>`).join('')};
-packEl.addEventListener('click',e=>{const b=e.target.closest('button[data-p]');if(!b)return;const k=b.dataset.p;if(pk[k])delete pk[k];else pk[k]=1;try{localStorage.setItem(PK,JSON.stringify(pk))}catch(e){}drawPack()});
+const packDone=()=>PACK.flatMap(g=>g[1]).every(t=>pk[t]);
+packEl.addEventListener('click',e=>{const b=e.target.closest('button[data-p]');if(!b)return;const k=b.dataset.p,was=packDone();if(pk[k])delete pk[k];else pk[k]=1;try{localStorage.setItem(PK,JSON.stringify(pk))}catch(e){}drawPack();if(!was&&packDone())fireworks()});
 drawPack();
 const fromHash=()=>{const h=location.hash.slice(1);if(h==='todo')return -1;if(h==='pack')return -3;if(h==='cost'&&SHOW_COST)return -2;const i=D.findIndex(x=>hid(x)===h);return i>=0?i:todayIdx>=0?todayIdx:beforeTrip?-1:0};
 window.addEventListener('hashchange',()=>{const i=fromHash();if(i!==cur)go(i)});
